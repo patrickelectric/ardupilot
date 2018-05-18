@@ -372,49 +372,49 @@ bool NOINLINE Sub::send_info(mavlink_channel_t chan)
     mavlink_msg_named_value_float_send(
             chan,
             AP_HAL::millis(),
-            "CamTilt",
+            FIELD_NAME("CamTilt"),
             1 - (SRV_Channels::get_output_norm(SRV_Channel::k_mount_tilt) / 2.0f + 0.5f));
 
     CHECK_PAYLOAD_SIZE2(NAMED_VALUE_FLOAT);
     mavlink_msg_named_value_float_send(
             chan,
             AP_HAL::millis(),
-            "CamPan",
+            FIELD_NAME("CamPan"),
             1 - (SRV_Channels::get_output_norm(SRV_Channel::k_mount_pan) / 2.0f + 0.5f));
 
     CHECK_PAYLOAD_SIZE2(NAMED_VALUE_FLOAT);
     mavlink_msg_named_value_float_send(
             chan,
             AP_HAL::millis(),
-            "TetherTrn",
+            FIELD_NAME("TetherTrn"),
             quarter_turn_count/4);
 
     CHECK_PAYLOAD_SIZE2(NAMED_VALUE_FLOAT);
     mavlink_msg_named_value_float_send(
             chan,
             AP_HAL::millis(),
-            "Lights1",
+            FIELD_NAME("Lights1"),
             SRV_Channels::get_output_norm(SRV_Channel::k_rcin9) / 2.0f + 0.5f);
 
     CHECK_PAYLOAD_SIZE2(NAMED_VALUE_FLOAT);
     mavlink_msg_named_value_float_send(
             chan,
             AP_HAL::millis(),
-            "Lights2",
+            FIELD_NAME("Lights2"),
             SRV_Channels::get_output_norm(SRV_Channel::k_rcin10) / 2.0f + 0.5f);
 
     CHECK_PAYLOAD_SIZE2(NAMED_VALUE_FLOAT);
     mavlink_msg_named_value_float_send(
             chan,
             AP_HAL::millis(),
-            "PilotGain",
+            FIELD_NAME("PilotGain"),
             gain);
 
     CHECK_PAYLOAD_SIZE2(NAMED_VALUE_FLOAT);
     mavlink_msg_named_value_float_send(
             chan,
             AP_HAL::millis(),
-            "InputHold",
+            FIELD_NAME("InputHold"),
             input_hold_engaged);
 
     return true;

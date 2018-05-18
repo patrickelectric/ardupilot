@@ -94,6 +94,13 @@ enum ap_message {
     }
 #define MAV_STREAM_TERMINATOR { 0, nullptr, 0 }
 
+#if (__GNUC__ > 9) || (__GNUC__ == 8 && __GNUC_MINOR__ >= 1)
+#include <array>
+#define FIELD_NAME(name) std::array<char, 10>{name}.data()
+#else
+#define FIELD_NAME(name) name
+#endif
+
 ///
 /// @class	GCS_MAVLINK
 /// @brief	MAVLink transport control class
