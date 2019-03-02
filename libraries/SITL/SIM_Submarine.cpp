@@ -46,9 +46,11 @@ Submarine::Submarine(const char *home_str, const char *frame_str) :
 // calculate rotational and linear accelerations
 void Submarine::calculate_forces(const struct sitl_input &input, Vector3f &rot_accel, Vector3f &body_accel)
 {
+    static auto rot_accel_local = Vector3f(0, 0, 0);
     rot_accel = Vector3f(0,0,0);
 
     // slight positive buoyancy
+    static auto body_accel_local = Vector3f(0, 0, 0);
     body_accel = Vector3f(0, 0, -calculate_buoyancy_acceleration());
 
     for (int i = 0; i < 6; i++) {
@@ -84,6 +86,12 @@ void Submarine::calculate_forces(const struct sitl_input &input, Vector3f &rot_a
         Vector3f air_resistance = -velocity_air_ef * (GRAVITY_MSS/terminal_velocity);
         body_accel += dcm.transposed() * air_resistance;
     }
+
+    rot_accel = rot_accel * 0.7 + rot_accel_local * 0.3;
+    rot_accel_local = rot_accel;
+
+    body_accel = body_accel * 0.7 + body_accel_local * 0.3;
+    body_accel_local = body_accel;
 }
 
 /**
