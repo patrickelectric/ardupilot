@@ -107,7 +107,7 @@ void Sub::althold_run()
         if(holdIt && lastVel*inertial_nav.get_velocity_z() < 0 ) {
             holdIt = false;
             pos_control.relax_alt_hold_controllers(motors.get_throttle_hover());
-            pos_control.set_alt_target(inertial_nav.get_altitude());
+            //pos_control.set_alt_target(inertial_nav.get_altitude());
         }
 
         pos_control.update_z_controller();
