@@ -192,9 +192,6 @@ void Sub::fast_loop()
     // update home from EKF if necessary
     update_home_from_EKF();
 
-    // check if we've reached the surface or bottom
-    update_surface_and_bottom_detector();
-
 #if MOUNT == ENABLED
     // camera mount's fast update
     camera_mount.update_fast();
@@ -383,6 +380,9 @@ void Sub::one_hz_loop()
 
     // update position controller alt limits
     update_poscon_alt_max();
+
+    // check if we've reached the surface or bottom
+    update_surface_and_bottom_detector();
 
     // enable/disable raw gyro/accel logging
     ins.set_raw_logging(should_log(MASK_LOG_IMU_RAW));

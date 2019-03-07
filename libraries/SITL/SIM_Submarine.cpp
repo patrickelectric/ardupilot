@@ -67,12 +67,16 @@ void Submarine::calculate_forces(const struct sitl_input &input, Vector3f &rot_a
 
     // Limit movement at the surface of the water
     if (position.z < 0 && body_accel.z < 0) {
-    	body_accel.z = GRAVITY_MSS;
+        body_accel.z = GRAVITY_MSS;
     }
+
+    if (position.z > 3) {
+        position.z = 3;
+    } else
 
     // Limit movement at the sea floor
     if (position.z > 100 && body_accel.z > -GRAVITY_MSS) {
-    	body_accel.z = -GRAVITY_MSS;
+        body_accel.z = -GRAVITY_MSS;
     }
 
     float terminal_rotation_rate = 10.0;
