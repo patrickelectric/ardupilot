@@ -91,6 +91,7 @@ void Sub::set_surfaced(bool at_surface)
 
     if (ap.at_surface) {
         Log_Write_Event(DATA_SURFACED);
+        gcs_send_text(MAV_SEVERITY_WARNING, "Vehicle in surface.");
     } else {
         Log_Write_Event(DATA_NOT_SURFACED);
     }
@@ -109,6 +110,7 @@ void Sub::set_bottomed(bool at_bottom)
 
     if (ap.at_bottom) {
         Log_Write_Event(DATA_BOTTOMED);
+        gcs_send_text(MAV_SEVERITY_WARNING, "Vehicle in bottom.");
     } else {
         Log_Write_Event(DATA_NOT_BOTTOMED);
     }
