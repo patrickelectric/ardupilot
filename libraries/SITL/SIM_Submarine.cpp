@@ -46,7 +46,7 @@ Submarine::Submarine(const char *home_str, const char *frame_str) :
 // calculate rotational and linear accelerations
 void Submarine::calculate_forces(const struct sitl_input &input, Vector3f &rot_accel, Vector3f &body_accel)
 {
-    rot_accel = Vector3f(0,0,0);
+    rot_accel = Vector3f(0, 0, 0);
 
     // slight positive buoyancy
     body_accel = Vector3f(0, 0, -calculate_buoyancy_acceleration());
@@ -56,11 +56,11 @@ void Submarine::calculate_forces(const struct sitl_input &input, Vector3f &rot_a
         int16_t pwm = input.servos[t.servo];
         float output = 0;
         if (pwm < 2000 && pwm > 1000) {
-         output = (pwm - 1500) / 400.0; // range -1~1
+            output = (pwm - 1500) / 400.0; // range -1~1
         }
 
         // 2.5 scalar for approximate real-life performance of T200 thruster
-        body_accel += t.linear * output * 2.5;
+        body_accel += t.linear * output * 2.5f;
 
         rot_accel += t.rotational * output;
     }
@@ -75,6 +75,7 @@ void Submarine::calculate_forces(const struct sitl_input &input, Vector3f &rot_a
     calculate_drag_force(velocity_air_bf, frame_property.linear_drag_coefficient, linear_drag_forces);
     // Add forces in body frame accel
     body_accel -= linear_drag_forces / frame_property.weight;
+    printf("> %f\n", body_accel.z);
 
     // Calculate angular drag forces
     Vector3f angular_drag_forces;
@@ -105,7 +106,7 @@ void Submarine::calculate_drag_force(const Vector3f &velocity, const Vector3f &d
         fabsf(velocity.z) * velocity.z
     );
 
-    force = (velocity_2 * water_density) * frame_property.equivalent_sphere_area / 2;
+    force = (velocity_2 * water_density) * frame_property.equivalent_sphere_area / 2.0f;
     force.x *= drag_coefficient.x;
     force.y *= drag_coefficient.y;
     force.z *= drag_coefficient.z;
