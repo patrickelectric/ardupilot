@@ -100,9 +100,9 @@ void Submarine::calculate_drag_force(const Vector3f &velocity, const Vector3f &d
      *  $(|V|/V)*V^2$ = $|V|*V$
      */
     const Vector3f velocity_2(
-        abs(velocity.x) * velocity.x,
-        abs(velocity.y) * velocity.y,
-        abs(velocity.z) * velocity.z
+        fabsf(velocity.x) * velocity.x,
+        fabsf(velocity.y) * velocity.y,
+        fabsf(velocity.z) * velocity.z
     );
 
     force = (velocity_2 * water_density) * frame_property.equivalent_sphere_area / 2;

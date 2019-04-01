@@ -66,7 +66,7 @@ protected:
         // $ V = 4 * pi * r^3 / 3 $
         // $ r ^2 = (V * 3 / 4) ^ (2/3) $
         // A = area (m^3), r = sphere radius (m)
-        float equivalent_sphere_area = M_PI_4 * pow(volume * 3 / 4, 2 / 3);
+        float equivalent_sphere_area = M_PI_4 * pow(volume * 3.0f / 4.0f, 2.0f / 3.0f);
 
     } frame_property;
 
