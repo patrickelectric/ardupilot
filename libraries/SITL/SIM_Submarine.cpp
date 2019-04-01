@@ -75,7 +75,7 @@ void Submarine::calculate_forces(const struct sitl_input &input, Vector3f &rot_a
     calculate_drag_force(velocity_air_bf, frame_property.linear_drag_coefficient, linear_drag_forces);
     // Add forces in body frame accel
     body_accel -= linear_drag_forces / frame_property.weight;
-    printf("> %f\n", body_accel.z);
+    //printf("> %f\n", body_accel.z);
 
     // Calculate angular drag forces
     Vector3f angular_drag_forces;
