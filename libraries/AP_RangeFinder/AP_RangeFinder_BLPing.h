@@ -30,16 +30,50 @@ private:
 
     void init_sensor();
 
-    // send message to sensor
+    /**
+     * @brief Send message with a specific payload
+     *
+     * @param msgid
+     * @param payload
+     * @param payload_len
+     */
     void send_message(uint16_t msgid, const uint8_t *payload, uint16_t payload_len);
 
-    // read a distance from the sensor
-    bool get_reading(uint16_t &reading_cm);
+    /**
+     * @brief Send set ping interval message
+     *
+     * @param interval
+     */
+    void set_ping_interval(uint16_t interval);
 
-    // process one byte received on serial port
-    // returns true if a distance message has been successfully parsed
-    // state is stored in msg structure
-    bool parse_byte(uint8_t b);
+    /**
+     * @brief Request a specific message ID
+     *
+     * @param msg_id
+     */
+    void request_message(uint16_t msg_id);
+
+    /**
+     * @brief Check for new available messages
+     *
+     */
+    bool check_new_messages();
+
+    /**
+     * @brief Process available message in msg structure
+     *
+     */
+    void process_available_message();
+
+    /**
+     * @brief Process one byte received on serial port
+     *  returns the message ID that was correctly parsed
+     *  state is stored in msg structure
+     *
+     * @param b
+     * @return uint16_t
+     */
+    uint16_t parse_byte(uint8_t b);
 
     enum class ParseState {
         HEADER1 = 0,
@@ -58,11 +92,13 @@ private:
     AP_HAL::UARTDriver *uart;
     uint32_t last_init_ms;      // system time that sensor was last initialised
     uint16_t distance_cm;       // latest distance
+    uint16_t ping_interval;     // sensor value for ping_interval, interval between pings
+    bool sensor_initialized;    // variable to check for sensor initial configuration
 
     // structure holding latest message contents
     struct {
         ParseState state;       // state of incoming message processing
-        uint8_t payload[20];    // payload
+        uint8_t payload[40];    // payload
         uint16_t payload_len;   // latest message payload length
         uint16_t msgid;         // latest message's message id
         uint16_t payload_recv;  // number of message's payload bytes received so far
