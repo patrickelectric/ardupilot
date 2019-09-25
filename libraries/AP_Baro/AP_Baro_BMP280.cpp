@@ -78,7 +78,7 @@ bool AP_Baro_BMP280::_init()
 
     uint8_t whoami;
     if (!_dev->read_registers(BMP280_REG_ID, &whoami, 1)  ||
-        whoami != BME280_ID) {
+        (whoami != BME280_ID && whoami != BMP280_ID)) {
         // not a BMP280
         return false;
     }
