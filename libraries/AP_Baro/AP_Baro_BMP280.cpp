@@ -79,7 +79,6 @@ bool AP_Baro_BMP280::_init()
     uint8_t whoami;
     if (!_dev->read_registers(BMP280_REG_ID, &whoami, 1)  ||
         whoami != BME280_ID) {
-            printf("whoami != BMP280_ID %d %d | %d\n", whoami, BMP280_ID, _dev->bus_type());
         // not a BMP280
         return false;
     }
