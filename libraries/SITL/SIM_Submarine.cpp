@@ -87,8 +87,10 @@ void Submarine::calculate_forces(const struct sitl_input &input, Vector3f &rot_a
         rot_accel += t.rotational * output * frame_property.thrust * frame_property.thruster_mount_radius / frame_property.moment_of_inertia;
     }
 
+    float floor_depth = calculate_sea_floor_depth(position);
+    range = floor_depth - position.z;
     // Limit movement at the sea floor
-    if (position.z > 100 && body_accel.z > -GRAVITY_MSS) {
+    if (position.z > floor_depth && body_accel.z > -GRAVITY_MSS) {
     	body_accel.z = -GRAVITY_MSS;
     }
 
@@ -113,7 +115,6 @@ void Submarine::calculate_forces(const struct sitl_input &input, Vector3f &rot_a
     add_shove_forces(rot_accel, body_accel);
 }
 
-
 /**
  * @brief Calculate the torque induced by buoyancy foam
  *
@@ -127,6 +128,18 @@ void Submarine::calculate_buoyancy_torque(Vector3f &torque)
     torque = force_position % force_up;
 }
 
+/**
+ * @brief Calculate sea floor depth from submarine position
+ *          This creates a non planar floor for rangefinder sensor test
+ *
+ * @param position
+ * @return float
+ */
+float Submarine::calculate_sea_floor_depth(const Vector3f &position)
+{
+    constexpr float wave_period = 10;
+    return 50 + 2*(cos(position.x/wave_period) + sin(position.y/wave_period));
+}
 
 /**
  * @brief Calculate drag force against body
