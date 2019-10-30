@@ -30,14 +30,18 @@ void Sub::read_rangefinder()
 #if RANGEFINDER_ENABLED == ENABLED
     rangefinder.update();
 
-    rangefinder_state.alt_healthy = ((rangefinder.status_orient(ROTATION_PITCH_270) == RangeFinder::RangeFinder_Good) && (rangefinder.range_valid_count_orient(ROTATION_PITCH_270) >= RANGEFINDER_HEALTH_MAX));
-
     int16_t temp_alt = rangefinder.distance_cm_orient(ROTATION_PITCH_270);
-
-#if RANGEFINDER_TILT_CORRECTION == ENABLED
+    #if RANGEFINDER_TILT_CORRECTION == ENABLED
     // correct alt for angle of the rangefinder
     temp_alt = (float)temp_alt * MAX(0.707f, ahrs.get_rotation_body_to_ned().c.z);
-#endif
+    #endif
+
+    rangefinder_state.alt_healthy = (
+        (rangefinder.status_orient(ROTATION_PITCH_270) == RangeFinder::RangeFinder_Good) &&
+        (rangefinder.range_valid_count_orient(ROTATION_PITCH_270) >= RANGEFINDER_HEALTH_MAX) &&
+        (temp_alt < rangefinder.max_distance_cm_orient(ROTATION_PITCH_270)) &&
+        (temp_alt > rangefinder.min_distance_cm_orient(ROTATION_PITCH_270))
+    );
 
     rangefinder_state.alt_cm = temp_alt;
 

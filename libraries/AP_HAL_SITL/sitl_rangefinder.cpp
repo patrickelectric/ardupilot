@@ -64,8 +64,8 @@ void SITL_State::_update_rangefinder(float range_value)
             voltage = 5.0f;
         }
     }
-
     sonar_pin_value = 1023 * (voltage / 5.0f);
+    //printf("%s: alt:%f, volt: %f, son: %d\n",__PRETTY_FUNCTION__, altitude, voltage, sonar_pin_value);
 }
 
 #endif

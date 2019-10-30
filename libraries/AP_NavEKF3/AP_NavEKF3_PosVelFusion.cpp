@@ -785,6 +785,7 @@ void NavEKF3_core::selectHeightForFusion()
         if (sensor != nullptr) {
             Vector3f posOffsetBody = sensor->get_pos_offset() - accelPosOffset;
             if (!posOffsetBody.is_zero()) {
+                //PATRICK
                 Vector3f posOffsetEarth = prevTnb.mul_transpose(posOffsetBody);
                 rangeDataDelayed.rng += posOffsetEarth.z / prevTnb.c.z;
             }
@@ -1635,4 +1636,3 @@ void NavEKF3_core::SelectBodyOdomFusion()
 
     }
 }
-

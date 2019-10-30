@@ -526,6 +526,9 @@ private:
     void guided_limit_init_time_and_pos();
     bool guided_limit_check();
 
+    bool terrain_following_init(bool ignore_checks = false);
+    void terrain_following_run();
+
     bool poshold_init(void);
     void poshold_run();
 

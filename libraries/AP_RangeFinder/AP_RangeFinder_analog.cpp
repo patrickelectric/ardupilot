@@ -27,7 +27,7 @@
 
 extern const AP_HAL::HAL& hal;
 
-/* 
+/*
    The constructor also initialises the rangefinder. Note that this
    constructor is not called until detect() returns true, so we
    already know that we should setup the rangefinder
@@ -44,7 +44,7 @@ AP_RangeFinder_analog::AP_RangeFinder_analog(RangeFinder::RangeFinder_State &_st
     set_status(RangeFinder::RangeFinder_NoData);
 }
 
-/* 
+/*
    detect if an analog rangefinder is connected. The only thing we
    can do is check if the pin number is valid. If it is, then assume
    that the device is connected
@@ -77,7 +77,7 @@ void AP_RangeFinder_analog::update_voltage(void)
 }
 
 /*
-  update distance_cm 
+  update distance_cm
  */
 void AP_RangeFinder_analog::update(void)
 {
@@ -93,7 +93,7 @@ void AP_RangeFinder_analog::update(void)
     case RangeFinder::FUNCTION_LINEAR:
         dist_m = (v - offset) * scaling;
         break;
-	  
+
     case RangeFinder::FUNCTION_INVERTED:
         dist_m = (offset - v) * scaling;
         break;
@@ -104,18 +104,13 @@ void AP_RangeFinder_analog::update(void)
         } else {
             dist_m = scaling / (v - offset);
         }
-        if (dist_m > _max_distance_cm * 0.01f) {
-            dist_m = _max_distance_cm * 0.01f;
-        }
         break;
     }
-    if (dist_m < 0) {
-        dist_m = 0;
-    }
+    dist_m = constrain_float(dist_m, 0.0f, _max_distance_cm * 0.01f);
+
     state.distance_cm = dist_m * 100.0f;
     state.last_reading_ms = AP_HAL::millis();
 
     // update range_valid state based on distance measured
     update_status();
 }
-

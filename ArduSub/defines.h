@@ -36,11 +36,12 @@ enum control_mode_t : uint8_t {
     ALT_HOLD =      2,  // manual angle with automatic depth/throttle
     AUTO =          3,  // fully automatic waypoint control using mission commands
     GUIDED =        4,  // fully automatic fly to coordinate or fly at velocity/direction using GCS immediate commands
+    TERRAIN_FOLLOWING = 5,   // Manual angle with automatic terrain distance/throttle
     CIRCLE =        7,  // automatic circular flight with automatic throttle
     SURFACE =       9,  // automatically return to surface, pilot maintains horizontal control
     POSHOLD =      16,  // automatic position hold with manual override, with automatic throttle
     MANUAL =       19,  // Pass-through input with no stabilization
-    MOTOR_DETECT = 20   // Automatically detect motors orientation
+    MOTOR_DETECT = 20,   // Automatically detect motors orientation
 };
 
 // Acro Trainer types
@@ -194,4 +195,3 @@ enum LoggingParameters {
 #define MAVLINK_SET_POS_TYPE_MASK_FORCE           (1<<9)
 #define MAVLINK_SET_POS_TYPE_MASK_YAW_IGNORE      (1<<10)
 #define MAVLINK_SET_POS_TYPE_MASK_YAW_RATE_IGNORE (1<<11)
-
