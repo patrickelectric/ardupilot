@@ -97,15 +97,15 @@ void Sub::terrain_following_run()
         }
     }
 
-    static float range_finder_dist_reference = rangefinder_state.alt_cm_filt.get();
+    static float range_finder_dist_reference = rangefinder_state.alt_cm;
     if (fabsf(channel_throttle->norm_input()-0.5f) > 0.05f) { // Throttle input above 5%
         // output pilot's throttle
         attitude_control.set_throttle_out(channel_throttle->norm_input(), false, g.throttle_filt);
         // reset z targets to current values
         pos_control.relax_alt_hold_controllers();
-        range_finder_dist_reference = rangefinder_state.alt_cm_filt.get();
+        range_finder_dist_reference = rangefinder_state.alt_cm;
     } else {
-        pos_control.set_alt_target(inertial_nav.get_altitude() + (range_finder_dist_reference - rangefinder_state.alt_cm_filt.get()));
+        pos_control.set_alt_target(inertial_nav.get_altitude() + (range_finder_dist_reference - rangefinder_state.alt_cm));
 
         pos_control.update_z_controller();
     }
