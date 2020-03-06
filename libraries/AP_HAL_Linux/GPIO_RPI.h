@@ -40,6 +40,7 @@ public:
     bool    usb_connected(void) override;
 
 private:
+    volatile uint32_t *_clock_manager;
     volatile uint32_t *_gpio;
 };
 

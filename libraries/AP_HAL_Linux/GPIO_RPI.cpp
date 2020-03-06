@@ -23,6 +23,8 @@
 #define BCM2708_PERI_BASE   0x20000000
 #define BCM2709_PERI_BASE   0x3F000000
 #define BCM2711_PERI_BASE   0xFE000000
+
+#define CLOCK_MANAGER_BASE(address)  (address + 0x101000)
 #define GPIO_BASE(address)  (address + 0x200000)
 
 // GPIO setup. Always use INP_GPIO(x) before OUT_GPIO(x) or SET_GPIO_ALT(x,y)
@@ -46,10 +48,13 @@ void GPIO_RPI::init()
 {
     int rpi_version = UtilRPI::from(hal.util)->get_rpi_version();
     uint32_t gpio_address;
+    uint32_t clock_manager_address;
     if(rpi_version == 1) {
         gpio_address = GPIO_BASE(BCM2708_PERI_BASE);
+        clock_manager_address = CLOCK_MANAGER_BASE(BCM2708_PERI_BASE)
     } else if (rpi_version == 2) {
         gpio_address = GPIO_BASE(BCM2709_PERI_BASE);
+        clock_manager_address = CLOCK_MANAGER_BASE(BCM2709_PERI_BASE)
     } else {
         gpio_address = GPIO_BASE(BCM2711_PERI_BASE);
     }
@@ -62,7 +67,7 @@ void GPIO_RPI::init()
     // mmap GPIO
     void *gpio_map = mmap(
         nullptr,              // Any adddress in our space will do
-        BLOCK_SIZE,           // Map length
+        BLOCK_SIZE,           // Map length // TODO: check this value
         PROT_READ|PROT_WRITE, // Enable reading & writting to mapped memory
         MAP_SHARED,           // Shared with other processes
         mem_fd,               // File to map
@@ -76,6 +81,18 @@ void GPIO_RPI::init()
     }
 
     _gpio = (volatile uint32_t *)gpio_map;
+
+    // mmap GPIO
+    void *clock_manager_map = mmap(
+        nullptr,              // Any adddress in our space will do
+        BLOCK_SIZE,           // Map length // TODO: check this value
+        PROT_READ|PROT_WRITE, // Enable reading & writting to mapped memory
+        MAP_SHARED,           // Shared with other processes
+        mem_fd,               // File to map
+        gpio_address          // Offset to GPIO peripheral
+    );
+
+    _clock_manager
 }
 
 void GPIO_RPI::pinMode(uint8_t pin, uint8_t output)
@@ -122,6 +139,11 @@ void GPIO_RPI::write(uint8_t pin, uint8_t value)
 void GPIO_RPI::toggle(uint8_t pin)
 {
     write(pin, !read(pin));
+}
+
+void GPIO_RPI::set_pwm()
+{
+    CLOCK_MANAGER_BASE
 }
 
 /* Alternative interface: */
