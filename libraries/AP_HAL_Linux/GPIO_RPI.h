@@ -32,6 +32,7 @@ public:
     uint8_t read(uint8_t pin) override;
     void    write(uint8_t pin, uint8_t value) override;
     void    toggle(uint8_t pin) override;
+    void    gpclk(uint8_t pin, uint32_t frequency) override;
 
     /* Alternative interface: */
     AP_HAL::DigitalSource* channel(uint16_t n) override;

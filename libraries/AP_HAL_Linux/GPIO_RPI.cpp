@@ -24,6 +24,14 @@
 #define BCM2709_PERI_BASE   0x3F000000
 #define BCM2711_PERI_BASE   0xFE000000
 
+#define BCM_CM_GP0CTL 0x0070
+#define BCM_CM_GP1CTL 0x0078
+#define BCM_CM_GP2CTL 0x0080
+
+#define BCM_CM_GP0DIV 0x0074
+#define BCM_CM_GP1DIV 0x007c
+#define BCM_CM_GP2DIV 0x0084
+
 #define CLOCK_MANAGER_BASE(address)  (address + 0x101000)
 #define GPIO_BASE(address)  (address + 0x200000)
 
@@ -51,10 +59,10 @@ void GPIO_RPI::init()
     uint32_t clock_manager_address;
     if(rpi_version == 1) {
         gpio_address = GPIO_BASE(BCM2708_PERI_BASE);
-        clock_manager_address = CLOCK_MANAGER_BASE(BCM2708_PERI_BASE)
+        clock_manager_address = CLOCK_MANAGER_BASE(BCM2708_PERI_BASE);
     } else if (rpi_version == 2) {
         gpio_address = GPIO_BASE(BCM2709_PERI_BASE);
-        clock_manager_address = CLOCK_MANAGER_BASE(BCM2709_PERI_BASE)
+        clock_manager_address = CLOCK_MANAGER_BASE(BCM2709_PERI_BASE);
     } else {
         gpio_address = GPIO_BASE(BCM2711_PERI_BASE);
     }
@@ -67,14 +75,12 @@ void GPIO_RPI::init()
     // mmap GPIO
     void *gpio_map = mmap(
         nullptr,              // Any adddress in our space will do
-        BLOCK_SIZE,           // Map length // TODO: check this value
-        PROT_READ|PROT_WRITE, // Enable reading & writting to mapped memory
-        MAP_SHARED,           // Shared with other processes
+        0xB4,           // Map length // TODO: check this value
+        PROT_READ|PROT_WRITE|PROT_EXEC, // Enable reading & writting to mapped memory
+        MAP_SHARED|MAP_LOCKED,           // Shared with other processes
         mem_fd,               // File to map
         gpio_address          // Offset to GPIO peripheral
     );
-
-    close(mem_fd); // No need to keep mem_fd open after mmap
 
     if (gpio_map == MAP_FAILED) {
         AP_HAL::panic("Can't open /dev/mem");
@@ -85,14 +91,22 @@ void GPIO_RPI::init()
     // mmap GPIO
     void *clock_manager_map = mmap(
         nullptr,              // Any adddress in our space will do
-        BLOCK_SIZE,           // Map length // TODO: check this value
-        PROT_READ|PROT_WRITE, // Enable reading & writting to mapped memory
-        MAP_SHARED,           // Shared with other processes
+        0xA8,           // Map length // TODO: check this value
+        PROT_READ|PROT_WRITE|PROT_EXEC, // Enable reading & writting to mapped memory
+        MAP_SHARED|MAP_LOCKED,           // Shared with other processes
         mem_fd,               // File to map
-        gpio_address          // Offset to GPIO peripheral
+        clock_manager_address // Offset to clock manager peripheral
     );
 
-    _clock_manager
+    if (clock_manager_map == MAP_FAILED) {
+        AP_HAL::panic("Can't open /dev/mem");
+    }
+
+    _clock_manager = (volatile uint32_t *)clock_manager_map;
+
+    close(mem_fd); // No need to keep mem_fd open after mmap
+
+    gpclk(4, 25000000);
 }
 
 void GPIO_RPI::pinMode(uint8_t pin, uint8_t output)
@@ -141,9 +155,63 @@ void GPIO_RPI::toggle(uint8_t pin)
     write(pin, !read(pin));
 }
 
-void GPIO_RPI::set_pwm()
+#include <iostream>
+
+void GPIO_RPI::gpclk(uint8_t pin, uint32_t frequency)
 {
-    CLOCK_MANAGER_BASE
+    std::cout << "CONFIGURINGGGGGG\n";
+
+    //TODO: use atari method
+    uint32_t BUSY_BIT = 0b01 << 7;
+    uint32_t PASSWORD = 0x005a << 24;
+    uint32_t ENAB = 0b01 << 4;
+    uint32_t OSCILLATOR = 5;
+    if (_clock_manager[BCM_CM_GP0CTL / 4] & BUSY_BIT) {
+        std::cout << "BUSY BIT IS SET!!!!!!!!!!!!!!!!!!!\n";
+        _clock_manager[BCM_CM_GP0CTL / 4] = PASSWORD | 1 << 5; // reset
+
+        usleep(10);
+        if(_clock_manager[BCM_CM_GP0CTL / 4] & BUSY_BIT) {
+            std::cout << "NOOOOO!\n";
+            return;
+        }
+    }
+
+    _clock_manager[BCM_CM_GP0CTL / 4] = PASSWORD | 1 << 5;
+    while(_clock_manager[BCM_CM_GP0CTL / 4] & BUSY_BIT) {
+        std::cout << ".";
+        usleep(100);
+    }
+
+    // 18Mhz clock
+    // Configure divisor
+    _clock_manager[BCM_CM_GP0DIV / 4] = PASSWORD | 80 << 12 | 0;
+    std::cout << "DIV:" << std::hex << _clock_manager[BCM_CM_GP0DIV / 4] << '\n';
+
+    while(_clock_manager[BCM_CM_GP0CTL / 4] & BUSY_BIT) {
+        std::cout << ".";
+        usleep(10);
+    }
+
+    // Configure oscillator
+    _clock_manager[BCM_CM_GP0CTL / 4] = (PASSWORD | OSCILLATOR);
+    usleep(10);
+
+    std::cout << "OSC:" << std::hex << _clock_manager[BCM_CM_GP0CTL / 4] << _clock_manager[BCM_CM_GP0CTL / 4] << "=" << (PASSWORD | OSCILLATOR)  <<'\n';
+
+    while(_clock_manager[BCM_CM_GP0CTL / 4] & BUSY_BIT) {
+        std::cout << "1";
+        usleep(10);
+    }
+
+    // Enable
+    _clock_manager[BCM_CM_GP0CTL / 4] |= PASSWORD | ENAB;
+    std::cout << "OSC:" << std::hex << _clock_manager[BCM_CM_GP0CTL / 4] << '\n';
+
+    pinMode(4, HAL_GPIO_ALT, 0);
+
+
+    std::cout << "Done!!!!!!!!\n";
 }
 
 /* Alternative interface: */
