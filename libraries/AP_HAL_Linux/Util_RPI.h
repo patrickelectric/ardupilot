@@ -12,15 +12,22 @@ public:
         return static_cast<UtilRPI*>(util);
     }
 
+    enum class Version {
+        PI_INVALID = 0,
+        PI_0_OR_1 = 1,
+        PI_2_OR_3 = 2,
+        PI_4 = 4,
+    };
+
     /* return the Raspberry Pi version */
-    int get_rpi_version() const;
+    UtilRPI::Version get_rpi_version() const;
 
 protected:
     // Called in the constructor once
-    int _check_rpi_version();
+    UtilRPI::Version _check_rpi_version();
 
 private:
-    int _rpi_version = 0;
+    UtilRPI::Version _rpi_version = Version::PI_INVALID;
 };
 
 }

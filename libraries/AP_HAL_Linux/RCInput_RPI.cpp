@@ -457,9 +457,9 @@ void RCInput_RPI::init()
     uint64_t signal_states(0);
 
 #if CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_ERLEBRAIN2
-    int version = 2;
+    const UtilRPI::Version version = UtilRPI::Version::PI_2_OR_3;
 #else
-    int version = UtilRPI::from(hal.util)->get_rpi_version();
+    const UtilRPI::Version version = UtilRPI::from(hal.util)->get_rpi_version();
 #endif
     set_physical_addresses(version);
     // Init memory for buffer and for DMA control blocks.

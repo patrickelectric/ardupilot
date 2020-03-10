@@ -44,11 +44,11 @@ GPIO_RPI::GPIO_RPI()
 
 void GPIO_RPI::init()
 {
-    int rpi_version = UtilRPI::from(hal.util)->get_rpi_version();
+    const UtilRPI::Version rpi_version = UtilRPI::from(hal.util)->get_rpi_version();
     uint32_t gpio_address;
-    if(rpi_version == 1) {
+    if(rpi_version == UtilRPI::Version::PI_0_OR_1) {
         gpio_address = GPIO_BASE(BCM2708_PERI_BASE);
-    } else if (rpi_version == 2) {
+    } else if (rpi_version == UtilRPI::Version::PI_2_OR_3) {
         gpio_address = GPIO_BASE(BCM2709_PERI_BASE);
     } else {
         gpio_address = GPIO_BASE(BCM2711_PERI_BASE);

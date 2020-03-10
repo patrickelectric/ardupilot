@@ -29,25 +29,30 @@ UtilRPI::UtilRPI()
     _check_rpi_version();
 }
 
-int UtilRPI::_check_rpi_version()
+UtilRPI::Version UtilRPI::_check_rpi_version()
 {
+    if (_rpi_version != Version::PI_INVALID) {
+        return _rpi_version;
+    }
+
     const unsigned int MAX_SIZE_LINE = 50;
     char buffer[MAX_SIZE_LINE];
     int hw;
 
     FILE *f = fopen("/sys/firmware/devicetree/base/model", "r");
     if (f != nullptr && fgets(buffer, MAX_SIZE_LINE, f) != nullptr) {
-        int ret = sscanf(buffer + 12, "%d", &_rpi_version);
+        int model_version = 0;
+        int ret = sscanf(buffer + 12, "%d", &model_version);
         fclose(f);
         if (ret != EOF) {
-            if (_rpi_version > 3)  {
-                _rpi_version = 4;
-            } else if (_rpi_version > 2) {
+            if (model_version > 3) {
+                _rpi_version = Version::PI_4;
+            } else if (model_version > 2) {
                 // Preserving old behavior.
-                _rpi_version = 2;
-            } else if (_rpi_version == 0) {
+                _rpi_version = Version::PI_2_OR_3
+            } else if (model_version == 0) {
                 // RPi 1 doesn't have a number there, so sscanf() won't have read anything.
-                _rpi_version = 1;
+                _rpi_version = Version::PI_0_OR_1;
             }
 
             printf("%s. (intern: %d)\n", buffer, _rpi_version);
@@ -61,22 +66,22 @@ int UtilRPI::_check_rpi_version()
 
     if (hw == UTIL_HARDWARE_RPI4) {
         printf("Raspberry Pi 4 with BCM2711!\n");
-        _rpi_version = 4;
+        _rpi_version = Version::PI_4;
     } else if (hw == UTIL_HARDWARE_RPI2) {
         printf("Raspberry Pi 2/3 with BCM2709!\n");
-        _rpi_version = 2;
+        _rpi_version = Version::PI_2_OR_3
     } else if (hw == UTIL_HARDWARE_RPI1) {
         printf("Raspberry Pi 1 with BCM2708!\n");
-        _rpi_version = 1;
+        _rpi_version = Version::PI_0_OR_1;
     } else {
         /* defaults to RPi version 2/3 */
         fprintf(stderr, "Could not detect RPi version, defaulting to 2/3\n");
-        _rpi_version = 2;
+        _rpi_version = Version::PI_2_OR_3
     }
     return _rpi_version;
 }
 
-int UtilRPI::get_rpi_version() const
+UtilRPI::Version UtilRPI::get_rpi_version() const
 {
     return _rpi_version;
 }
