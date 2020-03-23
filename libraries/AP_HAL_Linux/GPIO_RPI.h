@@ -41,9 +41,6 @@ public:
     bool    usb_connected(void) override;
 
 private:
-    constexpr uint32_t gpio_address() const;
-    volatile uint32_t* get_memory_pointer() const;
-
     // Raspberry Pi BASE memory address
     enum class Address : uint32_t {
         BCM2708_PERIPHERAL_BASE = 0x20000000, // Raspberry Pi 0/1
@@ -58,7 +55,7 @@ private:
     };
 
     // Offset between registers and clock manager offset
-    enum class ClockManager : uin32_t {
+    enum class ClockManager : uint32_t {
         GP0CTL = 0x70,
         GP1CTL = 0x78,
         GP2CTL = 0x80,
@@ -68,8 +65,19 @@ private:
         GP2DIV = 0x84,
     };
 
+    bool openMemoryDevice();
+    void closeMemoryDevice();
+    constexpr uint32_t gpio_address() const;
+    //TODO: check if volatile is necessary
+    volatile uint32_t* get_memory_pointer(uint32_t address, uint32_t range) const;
+    //constexpr uint32_t get_address(GPIO_RPI::Address address, GPIO_RPI::PeripheralOffset offset) const
+    constexpr uint32_t get_address(GPIO_RPI::Address address, GPIO_RPI::PeripheralOffset offset) const;
+
     volatile uint32_t *_clock_manager;
     volatile uint32_t *_gpio;
+
+    static const char* _system_memory_device_path;
+    int _system_memory_device;
 };
 
 }

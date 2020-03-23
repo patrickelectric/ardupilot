@@ -43,24 +43,26 @@ using namespace Linux;
 
 extern const AP_HAL::HAL& hal;
 
+const char* GPIO_RPI::_system_memory_device_path = "/dev/mem";
+
 GPIO_RPI::GPIO_RPI()
 {
 }
 
-constexpr uint32_t GPIO_RPI::get_address(GPIO_RPI::Address address, GPIO_RPI::PeripheralOffset offset) const
+uint32_t GPIO_RPI::get_address(GPIO_RPI::Address address, GPIO_RPI::PeripheralOffset offset) const
 {
     return static_cast<uint32_t>(address) + static_cast<uint32_t>(offset);
 }
 
-uint32_t* GPIO_RPI::get_memory_pointer(uint32_t address, uint32_t range) const
+volatile uint32_t* GPIO_RPI::get_memory_pointer(uint32_t address, uint32_t range) const
 {
     auto pointer = mmap(
-        nullptr,              // Any adddress in our space will do
-        range,           // Map length // TODO: check this value
-        PROT_READ|PROT_WRITE|PROT_EXEC, // Enable reading & writting to mapped memory
+        nullptr,                         // Any adddress in our space will do
+        range,                           // Map length // TODO: check this value
+        PROT_READ|PROT_WRITE|PROT_EXEC,  // Enable reading & writting to mapped memory
         MAP_SHARED|MAP_LOCKED,           // Shared with other processes
-        mem_fd,               // File to map
-        address          // Offset to GPIO peripheral
+        _system_memory_device,           // File to map
+        address                          // Offset to GPIO peripheral
     );
 
     if (pointer == MAP_FAILED) {
@@ -68,7 +70,25 @@ uint32_t* GPIO_RPI::get_memory_pointer(uint32_t address, uint32_t range) const
         return nullptr;
     }
 
-    return dynamic_cast<volatile uint32*>(pointer);
+    return static_cast<volatile uint32_t*>(pointer);
+}
+
+bool GPIO_RPI::openMemoryDevice()
+{
+    _system_memory_device = open(_system_memory_device_path, O_RDWR|O_SYNC|O_CLOEXEC);
+    if (_system_memory_device < 0) {
+        AP_HAL::panic("Can't open %s", GPIO_RPI::_system_memory_device_path);
+        return false;
+    }
+
+    return true;
+}
+
+void GPIO_RPI::closeMemoryDevice()
+{
+    close(_system_memory_device);
+    // Invalidate device variable
+    _system_memory_device = -1;
 }
 
 void GPIO_RPI::init()
@@ -84,20 +104,21 @@ void GPIO_RPI::init()
         peripheral_base = Address::BCM2711_PERIPHERAL_BASE;
     }
 
+    if (!openMemoryDevice()) {
+        AP_HAL::panic("Failed to initialize memory device.");
+        return;
+    }
+
     const uint32_t gpio_address = get_address(peripheral_base, PeripheralOffset::GPIO);
     const uint32_t clock_manager_address = get_address(peripheral_base, PeripheralOffset::CLOCK_MANAGER);
-
-    const int mem_fd = open("/dev/mem", O_RDWR|O_SYNC|O_CLOEXEC);
-    if (mem_fd < 0) {
-        AP_HAL::panic("Can't open /dev/mem");
-    }
 
     _gpio = get_memory_pointer(gpio_address, 0xB4);
     _clock_manager = get_memory_pointer(clock_manager_address, 0xA8);
 
-    close(mem_fd); // No need to keep mem_fd open after mmap
+    // No need to keep mem_fd open after mmap
+    closeMemoryDevice();
 
-    gpclk(4, 25000000); // Configure GPCLK
+    //gpclk(4, 25000000); // Configure GPCLK
 }
 
 void GPIO_RPI::pinMode(uint8_t pin, uint8_t output)
