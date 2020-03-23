@@ -99,6 +99,35 @@ private:
      */
     constexpr uint32_t get_address(GPIO_RPI::Address address, GPIO_RPI::PeripheralOffset offset) const;
 
+    /**
+     * @brief Change functionality of GPIO Function Select Registers (GPFSELn) to input.
+     * Each GPIO pin is mapped to 3 bits inside a 32 bits register, E.g:
+     *
+     * 0b00...'010'101
+     *   ││    │││ ││└── N pin, 1st bit, LSBit
+     *   ││    │││ │└─── N pin, 2nd bit
+     *   ││    │││ └──── N pin, 3rd bit, MSBit
+     *   ││    ││└────── (N+1) pin, 1st bit, LSBit
+     *   ││    │└─────── (N+1) pin, 2nd bit,
+     *   ││    └──────── (N+1) pin, 3rd bit, MSBit
+     *   ││  ...
+     *   │└───────────── Reserved
+     *   └────────────── Reserved
+     *
+     * And the value of this 3 bits selects the functionality of the GPIO pin, E.g:
+     *  000 = GPIO Pin N is an input
+     *  001 = GPIO Pin N is an output
+     *  100 = GPIO Pin N takes alternate function 0
+     *  101 = GPIO Pin N takes alternate function 1
+     *  110 = GPIO Pin N takes alternate function 2
+     *  111 = GPIO Pin N takes alternate function 3
+     *  011 = GPIO Pin N takes alternate function 4
+     *  010 = GPIO Pin N takes alternate function 5
+
+     * @param pin
+     */
+    void GPIO_RPI::set_gpio_mode_in(int pin);
+
     // Memory pointer to clock manager register
     volatile uint32_t* _clock_manager;
     // Memory pointer to gpio registers

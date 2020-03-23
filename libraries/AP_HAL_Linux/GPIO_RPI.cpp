@@ -27,9 +27,6 @@
 #define BCM_CM_GP1DIV 0x007c
 #define BCM_CM_GP2DIV 0x0084
 
-#define CLOCK_MANAGER_BASE(address)  (address + 0x101000)
-#define GPIO_BASE(address)  (address + 0x200000)
-
 // GPIO setup. Always use INP_GPIO(x) before OUT_GPIO(x) or SET_GPIO_ALT(x,y)
 #define GPIO_MODE_IN(g)     *(_gpio+((g)/10)) &= ~(7<<(((g)%10)*3))
 #define GPIO_MODE_OUT(g)    *(_gpio+((g)/10)) |=  (1<<(((g)%10)*3))
@@ -47,6 +44,19 @@ const char* GPIO_RPI::_system_memory_device_path = "/dev/mem";
 
 GPIO_RPI::GPIO_RPI()
 {
+}
+
+void GPIO_RPI::set_gpio_mode_in(int pin);
+{
+    // Each register can contain 10 pins
+    const uint8_t pins_per_register = 10;
+    // Calculates the position of the 3 bit mask in the 32 bits register
+    const uint8_t tree_bits_position_in_register = (g%pins_per_register)*3;
+    // Create a mask that only removes the bits in this specific GPIO pin, E.g:
+    // 0b11'111'111'111'111'111'111'000'111'111'111 for the 4th pin
+    const uint32_t mask = ~(0b111<<tree_bits_position_in_register);
+    // Apply mask
+    _gpio[g / pins_per_register] &= mask;
 }
 
 uint32_t GPIO_RPI::get_address(GPIO_RPI::Address address, GPIO_RPI::PeripheralOffset offset) const
@@ -124,9 +134,9 @@ void GPIO_RPI::init()
 void GPIO_RPI::pinMode(uint8_t pin, uint8_t output)
 {
     if (output == HAL_GPIO_INPUT) {
-        GPIO_MODE_IN(pin);
+        set_gpio_mode_in(pin);
     } else {
-        GPIO_MODE_IN(pin);
+        set_gpio_mode_in(pin);
         GPIO_MODE_OUT(pin);
     }
 }
@@ -134,12 +144,12 @@ void GPIO_RPI::pinMode(uint8_t pin, uint8_t output)
 void GPIO_RPI::pinMode(uint8_t pin, uint8_t output, uint8_t alt)
 {
     if (output == HAL_GPIO_INPUT) {
-        GPIO_MODE_IN(pin);
+        set_gpio_mode_in(pin);
     } else if (output == HAL_GPIO_ALT) {
-        GPIO_MODE_IN(pin);
+        set_gpio_mode_in(pin);
         GPIO_MODE_ALT(pin, alt);
     } else {
-        GPIO_MODE_IN(pin);
+        set_gpio_mode_in(pin);
         GPIO_MODE_OUT(pin);
     }
 }
