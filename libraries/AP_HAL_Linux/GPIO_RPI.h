@@ -65,18 +65,48 @@ private:
         GP2DIV = 0x84,
     };
 
+    /**
+     * @brief Open memory device to allow gpio address access
+     *  Should be used before get_memory_pointer calls in the initialization
+     *
+     * @return true
+     * @return false
+     */
     bool openMemoryDevice();
+
+    /**
+     * @brief Close open memory device
+     *
+     */
     void closeMemoryDevice();
-    constexpr uint32_t gpio_address() const;
+
     //TODO: check if volatile is necessary
+    /**
+     * @brief Return pointer to memory location with specific range access
+     *
+     * @param address
+     * @param range
+     * @return volatile uint32_t*
+     */
     volatile uint32_t* get_memory_pointer(uint32_t address, uint32_t range) const;
-    //constexpr uint32_t get_address(GPIO_RPI::Address address, GPIO_RPI::PeripheralOffset offset) const
+
+    /**
+     * @brief Get memory address based in base address and peripheral offset
+     *
+     * @param address
+     * @param offset
+     * @return constexpr uint32_t
+     */
     constexpr uint32_t get_address(GPIO_RPI::Address address, GPIO_RPI::PeripheralOffset offset) const;
 
-    volatile uint32_t *_clock_manager;
-    volatile uint32_t *_gpio;
-
+    // Memory pointer to clock manager register
+    volatile uint32_t* _clock_manager;
+    // Memory pointer to gpio registers
+    volatile uint32_t* _gpio;
+    // Path to memory device (E.g: /dev/mem)
     static const char* _system_memory_device_path;
+    // File descriptor for the memory device file
+    // If it's negative, then there was an error opening the file.
     int _system_memory_device;
 };
 
