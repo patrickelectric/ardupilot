@@ -19,11 +19,6 @@
 #include "GPIO.h"
 #include "Util_RPI.h"
 
-// Raspberry Pi GPIO memory
-#define BCM2708_PERI_BASE   0x20000000
-#define BCM2709_PERI_BASE   0x3F000000
-#define BCM2711_PERI_BASE   0xFE000000
-
 #define BCM_CM_GP0CTL 0x0070
 #define BCM_CM_GP1CTL 0x0078
 #define BCM_CM_GP2CTL 0x0080
@@ -52,61 +47,57 @@ GPIO_RPI::GPIO_RPI()
 {
 }
 
-void GPIO_RPI::init()
+constexpr uint32_t GPIO_RPI::get_address(GPIO_RPI::Address address, GPIO_RPI::PeripheralOffset offset) const
 {
-    int rpi_version = UtilRPI::from(hal.util)->get_rpi_version();
-    uint32_t gpio_address;
-    uint32_t clock_manager_address;
-    if(rpi_version == 1) {
-        gpio_address = GPIO_BASE(BCM2708_PERI_BASE);
-        clock_manager_address = CLOCK_MANAGER_BASE(BCM2708_PERI_BASE);
-    } else if (rpi_version == 2) {
-        gpio_address = GPIO_BASE(BCM2709_PERI_BASE);
-        clock_manager_address = CLOCK_MANAGER_BASE(BCM2709_PERI_BASE);
-    } else {
-        gpio_address = GPIO_BASE(BCM2711_PERI_BASE);
+    return static_cast<uint32_t>(address) + static_cast<uint32_t>(offset);
+}
+
+uint32_t* GPIO_RPI::get_memory_pointer(uint32_t address, uint32_t range) const
+{
+    auto pointer = mmap(
+        nullptr,              // Any adddress in our space will do
+        range,           // Map length // TODO: check this value
+        PROT_READ|PROT_WRITE|PROT_EXEC, // Enable reading & writting to mapped memory
+        MAP_SHARED|MAP_LOCKED,           // Shared with other processes
+        mem_fd,               // File to map
+        address          // Offset to GPIO peripheral
+    );
+
+    if (pointer == MAP_FAILED) {
+        AP_HAL::panic("Can't open /dev/mem");
+        return nullptr;
     }
 
-    int mem_fd = open("/dev/mem", O_RDWR|O_SYNC|O_CLOEXEC);
+    return dynamic_cast<volatile uint32*>(pointer);
+}
+
+void GPIO_RPI::init()
+{
+    const int rpi_version = UtilRPI::from(hal.util)->get_rpi_version();
+
+    GPIO_RPI::Address peripheral_base;
+    if(rpi_version == 1) {
+        peripheral_base = Address::BCM2708_PERIPHERAL_BASE;
+    } else if (rpi_version == 2) {
+        peripheral_base = Address::BCM2709_PERIPHERAL_BASE;
+    } else {
+        peripheral_base = Address::BCM2711_PERIPHERAL_BASE;
+    }
+
+    const uint32_t gpio_address = get_address(peripheral_base, PeripheralOffset::GPIO);
+    const uint32_t clock_manager_address = get_address(peripheral_base, PeripheralOffset::CLOCK_MANAGER);
+
+    const int mem_fd = open("/dev/mem", O_RDWR|O_SYNC|O_CLOEXEC);
     if (mem_fd < 0) {
         AP_HAL::panic("Can't open /dev/mem");
     }
 
-    // mmap GPIO
-    void *gpio_map = mmap(
-        nullptr,              // Any adddress in our space will do
-        0xB4,           // Map length // TODO: check this value
-        PROT_READ|PROT_WRITE|PROT_EXEC, // Enable reading & writting to mapped memory
-        MAP_SHARED|MAP_LOCKED,           // Shared with other processes
-        mem_fd,               // File to map
-        gpio_address          // Offset to GPIO peripheral
-    );
-
-    if (gpio_map == MAP_FAILED) {
-        AP_HAL::panic("Can't open /dev/mem");
-    }
-
-    _gpio = (volatile uint32_t *)gpio_map;
-
-    // mmap GPIO
-    void *clock_manager_map = mmap(
-        nullptr,              // Any adddress in our space will do
-        0xA8,           // Map length // TODO: check this value
-        PROT_READ|PROT_WRITE|PROT_EXEC, // Enable reading & writting to mapped memory
-        MAP_SHARED|MAP_LOCKED,           // Shared with other processes
-        mem_fd,               // File to map
-        clock_manager_address // Offset to clock manager peripheral
-    );
-
-    if (clock_manager_map == MAP_FAILED) {
-        AP_HAL::panic("Can't open /dev/mem");
-    }
-
-    _clock_manager = (volatile uint32_t *)clock_manager_map;
+    _gpio = get_memory_pointer(gpio_address, 0xB4);
+    _clock_manager = get_memory_pointer(clock_manager_address, 0xA8);
 
     close(mem_fd); // No need to keep mem_fd open after mmap
 
-    gpclk(4, 25000000);
+    gpclk(4, 25000000); // Configure GPCLK
 }
 
 void GPIO_RPI::pinMode(uint8_t pin, uint8_t output)
@@ -166,13 +157,13 @@ void GPIO_RPI::gpclk(uint8_t pin, uint32_t frequency)
     uint32_t PASSWORD = 0x005a << 24;
     uint32_t ENAB = 0b01 << 4;
     uint32_t OSCILLATOR = 5;
+
     if (_clock_manager[BCM_CM_GP0CTL / 4] & BUSY_BIT) {
-        std::cout << "BUSY BIT IS SET!!!!!!!!!!!!!!!!!!!\n";
         _clock_manager[BCM_CM_GP0CTL / 4] = PASSWORD | 1 << 5; // reset
 
         usleep(10);
         if(_clock_manager[BCM_CM_GP0CTL / 4] & BUSY_BIT) {
-            std::cout << "NOOOOO!\n";
+            AP_HAL::panic("Failed to configure GPCLK %d with %dHz", pin, frequency);
             return;
         }
     }
@@ -208,7 +199,7 @@ void GPIO_RPI::gpclk(uint8_t pin, uint32_t frequency)
     _clock_manager[BCM_CM_GP0CTL / 4] |= PASSWORD | ENAB;
     std::cout << "OSC:" << std::hex << _clock_manager[BCM_CM_GP0CTL / 4] << '\n';
 
-    pinMode(4, HAL_GPIO_ALT, 0);
+    pinMode(pin, HAL_GPIO_ALT, 0);
 
 
     std::cout << "Done!!!!!!!!\n";
