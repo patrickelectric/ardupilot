@@ -95,7 +95,7 @@ private:
      *
      * @param address
      * @param offset
-     * @return constexpr uint32_t
+     * @return uint32_t
      */
     constexpr uint32_t get_address(GPIO_RPI::Address address, GPIO_RPI::PeripheralOffset offset) const;
 
@@ -104,13 +104,13 @@ private:
      * Each GPIO pin is mapped to 3 bits inside a 32 bits register, E.g:
      *
      * 0b00...'010'101
-     *   ││    │││ ││└── N pin, 1st bit, LSBit
-     *   ││    │││ │└─── N pin, 2nd bit
-     *   ││    │││ └──── N pin, 3rd bit, MSBit
-     *   ││    ││└────── (N+1) pin, 1st bit, LSBit
-     *   ││    │└─────── (N+1) pin, 2nd bit,
-     *   ││    └──────── (N+1) pin, 3rd bit, MSBit
-     *   ││  ...
+     *   ││    │││ ││└── GPIO Pin N, 1st bit, LSBit
+     *   ││    │││ │└─── GPIO Pin N, 2nd bit
+     *   ││    │││ └──── GPIO Pin N, 3rd bit, MSBit
+     *   ││    ││└────── GPIO Pin N+1, 1st bit, LSBit
+     *   ││    │└─────── GPIO Pin N+1, 2nd bit,
+     *   ││    └──────── GPIO Pin N+1, 3rd bit, MSBit
+     *   ││   ...
      *   │└───────────── Reserved
      *   └────────────── Reserved
      *
@@ -123,7 +123,11 @@ private:
      *  111 = GPIO Pin N takes alternate function 3
      *  011 = GPIO Pin N takes alternate function 4
      *  010 = GPIO Pin N takes alternate function 5
-
+     *
+     * This information is also valid for:
+     *  - Linux::GPIO_RPI::set_gpio_mode_out
+     *  - Linux::GPIO_RPI::set_gpio_mode_alt
+     *
      * @param pin
      */
     void set_gpio_mode_in(int pin);
@@ -131,6 +135,51 @@ private:
     void set_gpio_mode_out(int pin);
 
     void set_gpio_mode_alt(int pin, int alternative);
+
+    /**
+     * @brief Modify GPSET0 (GPIO Pin Output Set 0) register to set pin as high
+     * Writing zero to this register has no effect, please use Linux::GPIO_RPI::set_gpio_low
+     * to set pin as low.
+     *
+     * GPSET0 is a 32bits register that each bit points to a respective GPIO pin:
+     * 0b...101
+     *      ││└── GPIO Pin 1, 1st bit, LSBit, defined as High
+     *      │└─── GPIO Pin 2, 2nd bit, No effect
+     *      └──── GPIO Pin 3, 3rd bit, defined as High
+     *     ...
+     *
+     * @param pin
+     */
+    void set_gpio_high(int pin);
+
+    /**
+     * @brief Modify GPCLR0 (GPIO Pin Output Clear 0) register to set pin as low
+     * Writing zero to this register has no effect, please use Linux::GPIO_RPI::set_gpio_high
+     * to set pin as high.
+     *
+     * GPCLR0 is a 32bits register that each bit points to a respective GPIO pin:
+     * 0b...101
+     *      ││└── GPIO Pin 1, 1st bit, LSBit, defined as Low
+     *      │└─── GPIO Pin 2, 2nd bit, No effect
+     *      └──── GPIO Pin 3, 3rd bit, defined as Low
+     *
+     * @param pin
+     */
+    void set_gpio_low(int pin);
+
+    /**
+     * @brief Read GPLEV0 (GPIO Pin Level 0) register check the logic state of a specific pin
+     *
+     * GPLEV0 is a 32bits register that each bit points to a respective GPIO pin:
+     * 0b...101
+     *      ││└── GPIO Pin 1, 1st bit, LSBit, Pin is in High state
+     *      │└─── GPIO Pin 2, 2nd bit, Pin is in Low state
+     *      └──── GPIO Pin 3, 3rd bit, Pin is in High state
+     *
+     * @param pin
+     * @return bool
+     */
+    bool get_gpio_logic_state(int pin);
 
     // Memory pointer to clock manager register
     volatile uint32_t* _clock_manager;

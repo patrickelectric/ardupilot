@@ -28,10 +28,6 @@
 #define BCM_CM_GP1DIV 0x007c
 #define BCM_CM_GP2DIV 0x0084
 
-// GPIO setup. Always use INP_GPIO(x) before OUT_GPIO(x) or SET_GPIO_ALT(x,y)
-#define GPIO_SET_HIGH       *(_gpio+7)  // sets   bits which are 1
-#define GPIO_SET_LOW        *(_gpio+10) // clears bits which are 1
-#define GPIO_GET(g)         (*(_gpio+13)&(1<<g)) // 0 if LOW, (1<<g) if HIGH
 #define GPIO_RPI_MAX_NUMBER_PINS 32
 
 using namespace Linux;
@@ -86,7 +82,7 @@ void GPIO_RPI::set_gpio_mode_in(int pin)
 void GPIO_RPI::set_gpio_mode_out(int pin)
 {
     // Each register can contain 10 pins
-    const uint8_t pins_per_register = 10;
+    constexpr uint8_t pins_per_register = 10;
     // Calculates the position of the 3 bit mask in the 32 bits register
     const uint8_t tree_bits_position_in_register = (pin%pins_per_register)*3;
     // Create a mask that enable the bit the sets output functionality
@@ -94,6 +90,30 @@ void GPIO_RPI::set_gpio_mode_out(int pin)
     const uint32_t mask = 0b001 << tree_bits_position_in_register;
     // Apply mask
     _gpio[pin / pins_per_register] |= mask;
+}
+
+void GPIO_RPI::set_gpio_high(int pin)
+{
+    // Calculate index of the array for the address 0x1c //TODO: Move this values to register name
+    constexpr uint32_t gpset0_memory_offset_value = 0x1c;
+    constexpr uint32_t gpset0_index_value = gpset0_memory_offset_value / sizeof(*_gpio);
+    _gpio[gpset0_index_value] |= 1 << pin;
+}
+
+void GPIO_RPI::set_gpio_low(int pin)
+{
+    // Calculate index of the array for the address 0x28
+    constexpr uint32_t gpclr0_memory_offset_value = 0x28;
+    constexpr uint32_t gpclr0_index_value = gpclr0_memory_offset_value / sizeof(*_gpio);
+    _gpio[gpclr0_index_value] |= 1 << pin;
+}
+
+bool GPIO_RPI::get_gpio_logic_state(int pin)
+{
+    // Calculate index of the array for the address 0x34
+    constexpr uint32_t gplev0_memory_offset_value = 0x34;
+    constexpr uint32_t gplev0_index_value = gplev0_memory_offset_value / sizeof(*_gpio);
+    return _gpio[gplev0_index_value] & (1 << pin);
 }
 
 uint32_t GPIO_RPI::get_address(GPIO_RPI::Address address, GPIO_RPI::PeripheralOffset offset) const
@@ -197,16 +217,15 @@ uint8_t GPIO_RPI::read(uint8_t pin)
     if (pin >= GPIO_RPI_MAX_NUMBER_PINS) {
         return 0;
     }
-    uint32_t value = GPIO_GET(pin);
-    return value ? 1: 0;
+    return static_cast<uint8_t>(get_gpio_logic_state(pin));
 }
 
 void GPIO_RPI::write(uint8_t pin, uint8_t value)
 {
     if (value == LOW) {
-        GPIO_SET_LOW = 1 << pin;
+        set_gpio_low(pin);
     } else {
-        GPIO_SET_HIGH = 1 << pin;
+        set_gpio_high(pin);
     }
 }
 
