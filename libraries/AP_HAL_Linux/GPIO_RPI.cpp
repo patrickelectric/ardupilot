@@ -29,9 +29,6 @@
 #define BCM_CM_GP2DIV 0x0084
 
 // GPIO setup. Always use INP_GPIO(x) before OUT_GPIO(x) or SET_GPIO_ALT(x,y)
-#define GPIO_MODE_IN(g)     *(_gpio+((g)/10)) &= ~(7<<(((g)%10)*3))
-#define GPIO_MODE_OUT(g)    *(_gpio+((g)/10)) |=  (1<<(((g)%10)*3))
-#define GPIO_MODE_ALT(g,a)  *(_gpio+(((g)/10))) |= (((a)<=3?(a)+4:(a)==4?3:2)<<(((g)%10)*3))
 #define GPIO_SET_HIGH       *(_gpio+7)  // sets   bits which are 1
 #define GPIO_SET_LOW        *(_gpio+10) // clears bits which are 1
 #define GPIO_GET(g)         (*(_gpio+13)&(1<<g)) // 0 if LOW, (1<<g) if HIGH
