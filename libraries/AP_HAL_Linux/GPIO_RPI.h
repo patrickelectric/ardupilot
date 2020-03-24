@@ -126,7 +126,11 @@ private:
 
      * @param pin
      */
-    void GPIO_RPI::set_gpio_mode_in(int pin);
+    void set_gpio_mode_in(int pin);
+
+    void set_gpio_mode_out(int pin);
+
+    void set_gpio_mode_alt(int pin, int alternative);
 
     // Memory pointer to clock manager register
     volatile uint32_t* _clock_manager;

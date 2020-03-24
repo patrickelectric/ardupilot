@@ -6,6 +6,7 @@
     CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_PXFMINI || \
     CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_NAVIGATOR
 
+#include <assert.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <poll.h>
@@ -46,17 +47,56 @@ GPIO_RPI::GPIO_RPI()
 {
 }
 
-void GPIO_RPI::set_gpio_mode_in(int pin);
+void GPIO_RPI::set_gpio_mode_alt(int pin, int alternative)
 {
     // Each register can contain 10 pins
     const uint8_t pins_per_register = 10;
     // Calculates the position of the 3 bit mask in the 32 bits register
-    const uint8_t tree_bits_position_in_register = (g%pins_per_register)*3;
+    const uint8_t tree_bits_position_in_register = (pin%pins_per_register)*3;
+    /** Creates a mask that enables the alternative function based in the following logic:
+     *
+     * | Alternative Function | 3 bits value |
+     * |:--------------------:|:------------:|
+     * |      Function 0      |     0b100    |
+     * |      Function 1      |     0b101    |
+     * |      Function 2      |     0b110    |
+     * |      Function 3      |     0b111    |
+     * |      Function 4      |     0b011    |
+     * |      Function 5      |     0b010    |
+     */
+    const uint8_t alternative_value =
+        (alternative < 4 ? (alternative + 4) : (alternative == 4 ? 3 : 2));
+    // 0b00'000'000'000'000'000'000'ALT'000'000'000 enables alternative for the 4th pin
+    alternative = alternative_value << tree_bits_position_in_register;
+    const uint32_t mask = static_cast<uint32_t>(alternative) << tree_bits_position_in_register;
+    // Apply mask
+    _gpio[pin / pins_per_register] |= mask;
+}
+
+void GPIO_RPI::set_gpio_mode_in(int pin)
+{
+    // Each register can contain 10 pins
+    const uint8_t pins_per_register = 10;
+    // Calculates the position of the 3 bit mask in the 32 bits register
+    const uint8_t tree_bits_position_in_register = (pin%pins_per_register)*3;
     // Create a mask that only removes the bits in this specific GPIO pin, E.g:
     // 0b11'111'111'111'111'111'111'000'111'111'111 for the 4th pin
     const uint32_t mask = ~(0b111<<tree_bits_position_in_register);
     // Apply mask
-    _gpio[g / pins_per_register] &= mask;
+    _gpio[pin / pins_per_register] &= mask;
+}
+
+void GPIO_RPI::set_gpio_mode_out(int pin)
+{
+    // Each register can contain 10 pins
+    const uint8_t pins_per_register = 10;
+    // Calculates the position of the 3 bit mask in the 32 bits register
+    const uint8_t tree_bits_position_in_register = (pin%pins_per_register)*3;
+    // Create a mask that enable the bit the sets output functionality
+    // 0b00'000'000'000'000'000'000'001'000'000'000 enables output for the 4th pin
+    const uint32_t mask = 0b001 << tree_bits_position_in_register;
+    // Apply mask
+    _gpio[pin / pins_per_register] |= mask;
 }
 
 uint32_t GPIO_RPI::get_address(GPIO_RPI::Address address, GPIO_RPI::PeripheralOffset offset) const
@@ -137,20 +177,21 @@ void GPIO_RPI::pinMode(uint8_t pin, uint8_t output)
         set_gpio_mode_in(pin);
     } else {
         set_gpio_mode_in(pin);
-        GPIO_MODE_OUT(pin);
+        set_gpio_mode_out(pin);
     }
 }
 
 void GPIO_RPI::pinMode(uint8_t pin, uint8_t output, uint8_t alt)
 {
+    assert(alt < 6);
     if (output == HAL_GPIO_INPUT) {
         set_gpio_mode_in(pin);
     } else if (output == HAL_GPIO_ALT) {
         set_gpio_mode_in(pin);
-        GPIO_MODE_ALT(pin, alt);
+        set_gpio_mode_alt(pin, alt);
     } else {
         set_gpio_mode_in(pin);
-        GPIO_MODE_OUT(pin);
+        set_gpio_mode_out(pin);
     }
 }
 
