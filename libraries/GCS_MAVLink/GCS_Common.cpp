@@ -334,6 +334,52 @@ void GCS_MAVLINK::send_distance_sensor() const
     send_proximity();
 }
 
+void GCS_MAVLINK::send_high_latency()
+{
+    AP_AHRS &ahrs = AP::ahrs();
+    ahrs.get_position(global_position_current_loc); // return value ignored; we send stale data
+
+    const AP_BattMonitor &battery = AP::battery();
+    float battery_current;
+
+    if (battery.healthy() && battery.current_amps(battery_current)) {
+        battery_current = constrain_float(battery_current * 100, -INT16_MAX,INT16_MAX);
+    } else {
+        battery_current = -1;
+    }
+
+    float temperature = AP::ins().get_temperature() * 100;
+    float temperature_air = AP::baro().get_temperature() * 100;
+
+    mavlink_msg_high_latency_send(
+        chan,
+        base_mode(),
+        gcs().custom_mode(),
+        landed_state(),
+        ahrs.roll,
+        ahrs.pitch,
+        ahrs.yaw,
+        abs(vfr_hud_throttle()),
+        /*heading_sp*/ 0,
+        global_position_current_loc.lat,
+        global_position_current_loc.lng,
+        vfr_hud_alt(),
+        /*altitude_sp*/ 0,
+        vfr_hud_airspeed(),
+        /*airspeed_sp*/ 0,
+        ahrs.groundspeed(),
+        vfr_hud_climbrate(),
+        /*satellites_visible*/ 0,
+        /*gps_fix_type*/ 0,
+        battery_current,
+        temperature,
+        temperature_air,
+        /*failsafe*/ 0,
+        /*wp_num*/ 0,
+        /*wp_distance*/ 0
+    );
+}
+
 void GCS_MAVLINK::send_rangefinder() const
 {
     RangeFinder *rangefinder = RangeFinder::get_singleton();
