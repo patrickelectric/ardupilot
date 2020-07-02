@@ -180,7 +180,7 @@ public:
 
     // return the temperature if supported. Zero is returned if no
     // temperature is available
-    float get_temperature(uint8_t instance) const { return _temperature[instance]; }
+    float get_temperature(uint8_t instance = 0) const { return _temperature[instance]; }
 
     /* get_delta_time returns the time period in seconds
      * overwhich the sensor data was collected
