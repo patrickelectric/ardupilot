@@ -968,9 +968,8 @@ public:
     T get(uint8_t i) const {
         if (i < N) {
             return _value[i];
-        } else {
-            return (T)0;
-        }
+        }             return (T)0;
+       
     }
 
     /// Value setter
