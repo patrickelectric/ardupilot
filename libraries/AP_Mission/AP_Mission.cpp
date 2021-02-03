@@ -1886,7 +1886,6 @@ void AP_Mission::increment_jump_times_run(Mission_Command& cmd, bool send_gcs_ms
 
     // if we've gotten this far then the _jump_tracking array must be full
     // To-Do: log an error
-    return;
 }
 
 // check_eeprom_version - checks version of missions stored in eeprom matches this library
