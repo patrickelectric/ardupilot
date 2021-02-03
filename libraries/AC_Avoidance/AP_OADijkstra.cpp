@@ -853,8 +853,7 @@ bool AP_OADijkstra::calc_shortest_path(const Location &origin, const Location &d
         if ((_short_path_data[nidx].distance_from_idx == OA_DIJKSTRA_POLYGON_SHORTPATH_NOTSET_IDX) ||
             (_short_path_data[nidx].distance_cm >= FLT_MAX)) {
             break;
-        } else {
-            // add node's id to path array
+        }             // add node's id to path array
             _path[_path_numpoints] = _short_path_data[nidx].id;
             _path_numpoints++;
 
@@ -866,7 +865,7 @@ bool AP_OADijkstra::calc_shortest_path(const Location &origin, const Location &d
                 // follow node's "distance_from_idx" to previous node on path
                 nidx = _short_path_data[nidx].distance_from_idx;
             }
-        }
+       
     }
     // update source and destination for by get_shortest_path_point
     if (success) {

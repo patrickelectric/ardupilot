@@ -572,9 +572,8 @@ float AC_Avoid::get_max_speed(float kP, float accel_cmss, float distance_cm, flo
 {
     if (is_zero(kP)) {
         return safe_sqrt(2.0f * distance_cm * accel_cmss);
-    } else {
-        return sqrt_controller(distance_cm, kP, accel_cmss, dt);
-    }
+    }         return sqrt_controller(distance_cm, kP, accel_cmss, dt);
+   
 }
 
 /*
@@ -1296,10 +1295,9 @@ float AC_Avoid::get_stopping_distance(float kP, float accel_cmss, float speed_cm
     // accel_cmss/kP is the point at which velocity switches from linear to sqrt
     if (speed_cms < accel_cmss/kP) {
         return speed_cms/kP;
-    } else {
-        // accel_cmss/(2.0f*kP*kP) is the distance at which we switch from linear to sqrt response
+    }         // accel_cmss/(2.0f*kP*kP) is the distance at which we switch from linear to sqrt response
         return accel_cmss/(2.0f*kP*kP) + (speed_cms*speed_cms)/(2.0f*accel_cmss);
-    }
+   
 }
 
 // convert distance (in meters) to a lean percentage (in 0~1 range) for use in manual flight modes

@@ -313,14 +313,13 @@ void AP_OAPathPlanner::avoidance_thread()
                 proximity_only = false;
                 res = OA_SUCCESS;
                 break;
-            } else {
-                // cleared all obstacles, trigger Dijkstra's to calculate path based on current deviated position  
+            }                 // cleared all obstacles, trigger Dijkstra's to calculate path based on current deviated position  
                 if (proximity_only == false) {
                     _oadijkstra->recalculate_path();
                 }
                 // only use proximity avoidance now for BendyRuler
                 proximity_only = true;
-            }
+           
             _oadijkstra->set_fence_margin(_margin_max);
             const AP_OADijkstra::AP_OADijkstra_State dijkstra_state = _oadijkstra->update(avoidance_request2.current_loc, avoidance_request2.destination, origin_new, destination_new);
             switch (dijkstra_state) {
