@@ -20,9 +20,8 @@ void NavEKF2_core::controlMagYawReset()
     if (assume_zero_sideslip() && !finalInflightYawInit && inFlight ) {
         gpsYawResetRequest = true;
         return;
-    } else {
-        gpsYawResetRequest = false;
-    }
+    }         gpsYawResetRequest = false;
+   
 
     // Quaternion and delta rotation vector that are re-used for different calculations
     Vector3f deltaRotVecTemp;

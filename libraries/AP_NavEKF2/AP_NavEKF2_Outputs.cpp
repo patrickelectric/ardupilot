@@ -70,9 +70,8 @@ bool NavEKF2_core::getHeightControlLimit(float &height) const
             height -= terrainState;
         }
         return true;
-    } else {
-        return false;
-    }
+    }         return false;
+   
 }
 
 
@@ -212,8 +211,7 @@ bool NavEKF2_core::getPosNE(Vector2f &posNE) const
         posNE.y = outputDataNew.position.y + posOffsetNED.y;
         return true;
 
-    } else {
-        // In constant position mode the EKF position states are at the origin, so we cannot use them as a position estimate
+    }         // In constant position mode the EKF position states are at the origin, so we cannot use them as a position estimate
         if(validOrigin) {
             if ((dal.gps().status(dal.gps().primary_sensor()) >= AP_DAL_GPS::GPS_OK_FIX_2D)) {
                 // If the origin has been set and we have GPS, then return the GPS position relative to the origin
@@ -239,7 +237,7 @@ bool NavEKF2_core::getPosNE(Vector2f &posNE) const
             posNE.y = 0.0f;
             return false;
         }
-    }
+   
     return false;
 }
 
@@ -296,8 +294,7 @@ bool NavEKF2_core::getLLH(struct Location &loc) const
             // correct for IMU offset (EKF calculations are at the IMU position)
             loc.offset((outputDataNew.position.x + posOffsetNED.x), (outputDataNew.position.y + posOffsetNED.y));
             return true;
-        } else {
-            // we could be in constant position mode  because the vehicle has taken off without GPS, or has lost GPS
+        }             // we could be in constant position mode  because the vehicle has taken off without GPS, or has lost GPS
             // in this mode we cannot use the EKF states to estimate position so will return the best available data
             if ((gps.status() >= AP_DAL_GPS::GPS_OK_FIX_2D)) {
                 // we have a GPS position fix to return
@@ -317,7 +314,7 @@ bool NavEKF2_core::getLLH(struct Location &loc) const
                 }
                 return false;
             }
-        }
+       
     } else {
         // If no origin has been defined for the EKF, then we cannot use its position states so return a raw
         // GPS reading if available and return false
@@ -392,10 +389,9 @@ bool NavEKF2_core::getMagOffsets(uint8_t mag_idx, Vector3f &magOffsets) const
             variancesConverged) {
         magOffsets = dal.get_compass()->get_offsets(magSelectIndex) - stateStruct.body_magfield*1000.0f;
         return true;
-    } else {
-        magOffsets = dal.get_compass()->get_offsets(magSelectIndex);
+    }         magOffsets = dal.get_compass()->get_offsets(magSelectIndex);
         return false;
-    }
+   
 }
 
 // return the innovations for the NED Pos, NED Vel, XYZ Mag and Vtas measurements

@@ -916,9 +916,8 @@ void NavEKF2_core::writeExtNavData(const Vector3f &pos, const Quaternion &quat, 
     // don't try to write to buffer until the filter has been initialised
     if ((timeStamp_ms - extNavMeasTime_ms) < 20) {
         return;
-    } else {
-        extNavMeasTime_ms = timeStamp_ms;
-    }
+    }         extNavMeasTime_ms = timeStamp_ms;
+   
 
     if (resetTime_ms != extNavLastPosResetTime_ms) {
         extNavDataNew.posReset = true;

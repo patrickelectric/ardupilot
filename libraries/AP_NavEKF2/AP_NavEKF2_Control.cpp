@@ -42,9 +42,8 @@ uint8_t NavEKF2_core::effective_magCal(void) const
     // force use of simple magnetic heading fusion for specified cores
     if (frontend->_magMask & core_index) {
         return 2;
-    } else {
-        return frontend->_magCal;
-    }
+    }         return frontend->_magCal;
+   
 }
 
 // Determine if learning of wind and magnetic field will be enabled and set corresponding indexing limits to

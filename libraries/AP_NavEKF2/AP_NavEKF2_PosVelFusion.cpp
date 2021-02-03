@@ -384,9 +384,8 @@ void NavEKF2_core::SelectVelPosFusion()
     if (magFusePerformed && dtIMUavg < 0.005f && !posVelFusionDelayed) {
         posVelFusionDelayed = true;
         return;
-    } else {
-        posVelFusionDelayed = false;
-    }
+    }         posVelFusionDelayed = false;
+   
 
     // Check for data at the fusion time horizon
     extNavDataToFuse = storedExtNav.recall(extNavDataDelayed, imuDataDelayed.time_ms);

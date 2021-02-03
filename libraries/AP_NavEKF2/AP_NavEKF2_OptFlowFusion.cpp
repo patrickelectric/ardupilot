@@ -22,9 +22,8 @@ void NavEKF2_core::SelectFlowFusion()
     if (magFusePerformed && dtIMUavg < 0.005f && !optFlowFusionDelayed) {
         optFlowFusionDelayed = true;
         return;
-    } else {
-        optFlowFusionDelayed = false;
-    }
+    }         optFlowFusionDelayed = false;
+   
 
     // Perform Data Checks
     // Check if the optical flow data is still valid
