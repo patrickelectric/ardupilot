@@ -1376,7 +1376,6 @@ void AP_AHRS_NavEKF::get_relative_position_D_home(float &posD) const
     }
 
     posD = originD - ((originLLH.alt - _home.alt) * 0.01f);
-    return;
 }
 /*
   canonicalise _ekf_type, forcing it to be 0, 2 or 3
