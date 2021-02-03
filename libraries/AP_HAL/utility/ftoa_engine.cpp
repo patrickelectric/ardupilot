@@ -216,8 +216,7 @@ int16_t ftoa_engine(float val, char *buf, uint8_t precision, uint8_t maxDecimals
                     exp10++;
                     flags |= FTOA_CARRY;
                     break;
-                } else
-                    buf[outputIdx--] = '0'; // and the loop continues, carrying to next digit.
+                }                     buf[outputIdx--] = '0'; // and the loop continues, carrying to next digit.
             }
             else break;
         }

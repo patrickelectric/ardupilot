@@ -32,9 +32,8 @@ bool AP_HAL::CANFrame::priorityHigherThan(const CANFrame& rhs) const
         const uint32_t rhs_arb11 = rhs_ext ? (rhs_clean_id >> 18) : rhs_clean_id;
         if (arb11 != rhs_arb11) {
             return arb11 < rhs_arb11;
-        } else {
-            return rhs_ext;
-        }
+        }             return rhs_ext;
+       
     }
 
     /*

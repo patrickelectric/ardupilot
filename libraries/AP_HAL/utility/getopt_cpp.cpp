@@ -145,11 +145,10 @@ int GetOptLong::getoption(void)
                     
                     if (longopts[i].flag == nullptr)
                         return longopts[i].val;
-                    else
-                    {
-                        *longopts[i].flag = longopts[i].val;
+                    
+                                            *longopts[i].flag = longopts[i].val;
                         return 0;
-                    }
+                   
                 }
             }
             
