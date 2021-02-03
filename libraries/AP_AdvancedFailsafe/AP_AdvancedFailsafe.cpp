@@ -411,7 +411,7 @@ bool AP_AdvancedFailsafe::gcs_terminate(bool should_terminate, const char *reaso
             gcs().send_text(MAV_SEVERITY_INFO, "Aborting termination due to %s", reason);
         }
         return true;
-    } else if (should_terminate && _terminate_action != TERMINATE_ACTION_TERMINATE) {
+    } if (should_terminate && _terminate_action != TERMINATE_ACTION_TERMINATE) {
         gcs().send_text(MAV_SEVERITY_INFO, "Unable to terminate, termination is not configured");
     }
     return false;
