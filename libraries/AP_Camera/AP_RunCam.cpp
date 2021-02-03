@@ -708,18 +708,16 @@ void AP_RunCam::handle_5_key_simulation_response(const Request& request)
 AP_RunCam::ControlOperation AP_RunCam::start_recording_command() const {
     if (DeviceType(_cam_type.get()) == DeviceType::Split4k) {
         return ControlOperation::RCDEVICE_PROTOCOL_SIMULATE_POWER_BTN;
-    } else {
-        return ControlOperation::RCDEVICE_PROTOCOL_CHANGE_START_RECORDING;
-    }
+    }         return ControlOperation::RCDEVICE_PROTOCOL_CHANGE_START_RECORDING;
+   
 }
 
 // command to stop recording
 AP_RunCam::ControlOperation AP_RunCam::stop_recording_command() const {
     if (DeviceType(_cam_type.get()) == DeviceType::Split4k) {
         return ControlOperation::RCDEVICE_PROTOCOL_SIMULATE_POWER_BTN;
-    } else {
-        return ControlOperation::RCDEVICE_PROTOCOL_CHANGE_STOP_RECORDING;
-    }
+    }         return ControlOperation::RCDEVICE_PROTOCOL_CHANGE_STOP_RECORDING;
+   
 }
 
 // process a response from the serial port
