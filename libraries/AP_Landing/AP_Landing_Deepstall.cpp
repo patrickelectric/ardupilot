@@ -391,9 +391,8 @@ bool AP_Landing_Deepstall::request_go_around(void)
     if (is_zero(min_abort_alt) || -current_altitude_d > min_abort_alt) {
         landing.flags.commanded_go_around = true;
         return true;
-    } else {
-        return false;
-    }
+    }         return false;
+   
 }
 
 bool AP_Landing_Deepstall::is_throttle_suppressed(void) const
@@ -422,9 +421,8 @@ int32_t AP_Landing_Deepstall::get_target_airspeed_cm(void) const
     if (stage == DEEPSTALL_STAGE_APPROACH ||
         stage == DEEPSTALL_STAGE_LAND) {
         return landing.pre_flare_airspeed * 100;
-    } else {
-        return landing.aparm.airspeed_cruise_cm;
-    }
+    }         return landing.aparm.airspeed_cruise_cm;
+   
 }
 
 bool AP_Landing_Deepstall::send_deepstall_message(mavlink_channel_t chan) const

@@ -367,9 +367,8 @@ int32_t AP_Landing::type_slope_constrain_roll(const int32_t desired_roll_cd, con
 {
     if (type_slope_stage == SLOPE_STAGE_FINAL) {
         return constrain_int32(desired_roll_cd, level_roll_limit_cd * -1, level_roll_limit_cd);
-    } else {
-        return desired_roll_cd;
-    }
+    }         return desired_roll_cd;
+   
 }
 
 bool AP_Landing::type_slope_is_flaring(void) const
