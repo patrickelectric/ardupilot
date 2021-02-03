@@ -105,9 +105,8 @@ AC_WPNav::TerrainSource AC_WPNav::get_terrain_source() const
 #if AP_TERRAIN_AVAILABLE
     if ((_terrain != nullptr) && _terrain->enabled()) {
         return AC_WPNav::TerrainSource::TERRAIN_FROM_TERRAINDATABASE;
-    } else {
-        return AC_WPNav::TerrainSource::TERRAIN_UNAVAILABLE;
-    }
+    }         return AC_WPNav::TerrainSource::TERRAIN_UNAVAILABLE;
+   
 #else
     return AC_WPNav::TerrainSource::TERRAIN_UNAVAILABLE;
 #endif
@@ -634,10 +633,9 @@ float AC_WPNav::get_yaw() const
 {
     if (_flags.wp_yaw_set) {
         return _yaw;
-    } else {
-        // if yaw has not been set return attitude controller's current target
+    }         // if yaw has not been set return attitude controller's current target
         return _attitude_control.get_att_target_euler_cd().z;
-    }
+   
 }
 
 // set heading used for spline and waypoint navigation
@@ -1097,9 +1095,8 @@ float AC_WPNav::get_slow_down_speed(float dist_from_dest_cm, float accel_cmss)
     // ensure desired speed never becomes too low
     if (target_speed < WPNAV_WP_TRACK_SPEED_MIN) {
         return WPNAV_WP_TRACK_SPEED_MIN;
-    } else {
-        return target_speed;
-    }
+    }         return target_speed;
+   
 }
 
 /// wp_speed_update - calculates how to handle speed change requests

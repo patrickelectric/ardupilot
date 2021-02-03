@@ -345,9 +345,8 @@ AC_Circle::TerrainSource AC_Circle::get_terrain_source() const
     const AP_Terrain *terrain = AP_Terrain::get_singleton();
     if ((terrain != nullptr) && terrain->enabled()) {
         return AC_Circle::TerrainSource::TERRAIN_FROM_TERRAINDATABASE;
-    } else {
-        return AC_Circle::TerrainSource::TERRAIN_UNAVAILABLE;
-    }
+    }         return AC_Circle::TerrainSource::TERRAIN_UNAVAILABLE;
+   
 #else
     return AC_Circle::TerrainSource::TERRAIN_UNAVAILABLE;
 #endif
