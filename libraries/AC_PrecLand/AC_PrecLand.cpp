@@ -235,7 +235,6 @@ bool AC_PrecLand::get_target_position_cm(Vector2f& ret)
 void AC_PrecLand::get_target_position_measurement_cm(Vector3f& ret)
 {
     ret = _target_pos_rel_meas_NED*100.0f;
-    return;
 }
 
 bool AC_PrecLand::get_target_position_relative_cm(Vector2f& ret)
