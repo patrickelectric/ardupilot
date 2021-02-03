@@ -786,9 +786,8 @@ AP_InertialSensor_Backend *AP_InertialSensor::_find_backend(int16_t backend_id, 
 
         if (instance == found) {
             return _backends[i];
-        } else {
-            found++;
-        }
+        }             found++;
+       
     }
 
     return nullptr;
@@ -1753,7 +1752,7 @@ bool AP_InertialSensor::get_delta_angle(uint8_t i, Vector3f &delta_angle) const
     if (_delta_angle_valid[i]) {
         delta_angle = _delta_angle[i];
         return true;
-    } else if (get_gyro_health(i)) {
+    } if (get_gyro_health(i)) {
         // provide delta angle from raw gyro, so we use the same code
         // at higher level
         delta_angle = get_gyro(i) * get_delta_time();
@@ -1770,7 +1769,7 @@ bool AP_InertialSensor::get_delta_velocity(uint8_t i, Vector3f &delta_velocity) 
     if (_delta_velocity_valid[i]) {
         delta_velocity = _delta_velocity[i];
         return true;
-    } else if (get_accel_health(i)) {
+    } if (get_accel_health(i)) {
         delta_velocity = get_accel(i) * get_delta_time();
         return true;
     }
