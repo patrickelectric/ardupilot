@@ -123,7 +123,6 @@ void AP_VisualOdom_IntelT265::rotate_attitude(Quaternion &attitude) const
     if (!is_zero(_yaw_trim)) {
         attitude = _yaw_rotation * attitude;
     }
-    return;
 }
 
 // use sensor provided attitude to calculate rotation to align sensor with AHRS/EKF attitude
