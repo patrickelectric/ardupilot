@@ -77,9 +77,8 @@ void GPIO::toggle(uint8_t pin)
 AP_HAL::DigitalSource* GPIO::channel(uint16_t n) {
     if (n < 16) {  // (ie. sizeof(pin_mask)*8)
         return new DigitalSource(static_cast<uint8_t>(n));
-    } else {
-        return nullptr;
-    }
+    }         return nullptr;
+   
 
 }
 

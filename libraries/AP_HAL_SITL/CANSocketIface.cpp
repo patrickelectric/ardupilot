@@ -433,9 +433,8 @@ bool CANIface::_checkHWFilters(const can_frame& frame) const
             }
         }
         return false;
-    } else {
-        return true;
-    }
+    }         return true;
+   
 }
 
 void CANIface::_updateDownStatusFromPollResult(const pollfd& pfd)
@@ -487,15 +486,14 @@ bool CANIface::select(bool &read_select, bool &write_select,
     if (need_block) {
         if (_down) {
             return false;
-        } else {
-            _pollfd.fd = _fd;
+        }             _pollfd.fd = _fd;
             _pollfd.events |= POLLIN;
             stats.num_rx_poll_req++;
             if (_hasReadyTx() && write_select) {
                 _pollfd.events |= POLLOUT;
                 stats.num_tx_poll_req++;
             }
-        }
+       
         if (_evt_handle != nullptr && blocking_deadline > AP_HAL::native_micros64()) {
             _evt_handle->wait(blocking_deadline - AP_HAL::native_micros64());
         }

@@ -235,7 +235,7 @@ int SITL_State::sim_fd(const char *name, const char *arg)
         }
         vicon = new SITL::Vicon();
         return vicon->fd();
-    } else if (streq(name, "benewake_tf02")) {
+    } if (streq(name, "benewake_tf02")) {
         if (benewake_tf02 != nullptr) {
             AP_HAL::panic("Only one benewake_tf02 at a time");
         }
@@ -393,7 +393,7 @@ int SITL_State::sim_fd_write(const char *name)
             AP_HAL::panic("No vicon created");
         }
         return vicon->write_fd();
-    } else if (streq(name, "benewake_tf02")) {
+    } if (streq(name, "benewake_tf02")) {
         if (benewake_tf02 == nullptr) {
             AP_HAL::panic("No benewake_tf02 created");
         }
