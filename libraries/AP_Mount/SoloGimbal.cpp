@@ -32,7 +32,7 @@ gimbal_mode_t SoloGimbal::get_mode()
 
     if ((_gimbalParams.initialized() && is_zero(_gimbalParams.get_K_rate())) || (_ahrs.get_rotation_body_to_ned().c.z < 0 && !(_lockedToBody || _calibrator.running()))) {
         return GIMBAL_MODE_IDLE;
-    } else if (!_ekf.getStatus()) {
+    } if (!_ekf.getStatus()) {
         return GIMBAL_MODE_POS_HOLD;
     } else if (_calibrator.running() || _lockedToBody) {
         return GIMBAL_MODE_POS_HOLD_FF;
@@ -490,9 +490,8 @@ AccelCalibrator* SoloGimbal::_acal_get_calibrator(uint8_t instance)
 {
     if(instance==0 && (present() || _calibrator.get_status() == ACCEL_CAL_SUCCESS)) {
         return &_calibrator;
-    } else {
-        return nullptr;
-    }
+    }         return nullptr;
+   
 }
 
 bool SoloGimbal::_acal_get_ready_to_sample()
