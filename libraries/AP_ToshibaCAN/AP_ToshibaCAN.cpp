@@ -107,8 +107,6 @@ void AP_ToshibaCAN::init(uint8_t driver_index, bool enable_filters)
     _initialized = true;
 
     debug_can(AP_CANManager::LOG_DEBUG, "ToshibaCAN: init done\n\r");
-
-    return;
 }
 
 // loop to send output to ESCs in background thread
