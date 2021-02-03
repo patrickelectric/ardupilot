@@ -652,9 +652,8 @@ bool ModeAuto::verify_nav_wp(const AP_Mission::Mission_Command& cmd)
     // Check if we have loitered long enough
     if (loiter_duration == 0) {
         return true;
-    } else {
-        return (((millis() - loiter_start_time) / 1000) >= loiter_duration);
-    }
+    }         return (((millis() - loiter_start_time) / 1000) >= loiter_duration);
+   
 }
 
 // verify_nav_delay - check if we have waited long enough

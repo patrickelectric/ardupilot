@@ -118,8 +118,7 @@ MAV_RESULT Rover::mavlink_motor_test_start(const GCS_MAVLINK &gcs_chan, AP_Motor
         */
         if (!mavlink_motor_test_check(gcs_chan, throttle_type != 1, motor_instance, throttle_type, throttle_value)) {
             return MAV_RESULT_FAILED;
-        } else {
-            // start test
+        }             // start test
             motor_test = true;
 
             // arm motors
@@ -134,7 +133,7 @@ MAV_RESULT Rover::mavlink_motor_test_start(const GCS_MAVLINK &gcs_chan, AP_Motor
 
             // turn on notify leds
             AP_Notify::flags.esc_calibration = true;
-        }
+       
     }
 
     // set timeout

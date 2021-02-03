@@ -404,9 +404,8 @@ float Mode::calc_speed_nudge(float target_speed, bool reversed)
     // return the larger of the pilot speed and the original target speed
     if (reversed) {
         return MIN(target_speed, pilot_speed);
-    } else {
-        return MAX(target_speed, pilot_speed);
-    }
+    }         return MAX(target_speed, pilot_speed);
+   
 }
 
 // high level call to navigate to waypoint

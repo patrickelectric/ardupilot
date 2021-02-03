@@ -462,9 +462,8 @@ float Sailboat::calc_heading(float desired_heading_cd)
     // return the correct heading for our current tack
     if (current_tack == AP_WindVane::Sailboat_Tack::TACK_PORT) {
         return degrees(left_no_go_heading_rad) * 100.0f;
-    } else {
-        return degrees(right_no_go_heading_rad) * 100.0f;
-    }
+    }         return degrees(right_no_go_heading_rad) * 100.0f;
+   
 }
 
 // set state of motor
