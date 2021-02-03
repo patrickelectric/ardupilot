@@ -59,8 +59,7 @@ void stringToBytes(const char* string, uint8_t* bytes, int* index, int maxLength
     {
         if(string[i] == 0)
             break;
-        else
-            bytes[i] = (uint8_t)string[i];
+                    bytes[i] = (uint8_t)string[i];
     }
 
     // Make sure last byte has null termination

@@ -42,8 +42,7 @@ void stringFromBytes(char* string, const uint8_t* bytes, int* index, int maxLeng
     {
         if(bytes[i] == 0)
             break;
-        else
-            string[i] = (char)bytes[i];
+                    string[i] = (char)bytes[i];
     }
 
     // Make sure we include null terminator
