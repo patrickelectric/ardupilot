@@ -77,7 +77,7 @@ void ADSB::update(void)
     if (_sitl == nullptr) {
         _sitl = AP::sitl();
         return;
-    } else if (_sitl->adsb_plane_count <= 0) {
+    } if (_sitl->adsb_plane_count <= 0) {
         return;
     } else if (_sitl->adsb_plane_count >= num_vehicles_MAX) {
         _sitl->adsb_plane_count.set_and_save(0);

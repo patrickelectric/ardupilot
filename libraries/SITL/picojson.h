@@ -804,7 +804,7 @@ template <typename String, typename Iter> inline bool _parse_string(String &out,
     if (ch < ' ') {
       in.ungetc();
       return false;
-    } else if (ch == '"') {
+    } if (ch == '"') {
       return true;
     } else if (ch == '\\') {
       if ((ch = in.getc()) == -1) {
@@ -1108,7 +1108,7 @@ template <typename Context, typename Iter> inline Iter _parse(Context &ctx, cons
       int ch = in.getc();
       if (ch == -1 || ch == '\n') {
         break;
-      } else if (ch >= ' ') {
+      } if (ch >= ' ') {
         err->push_back(static_cast<char>(ch));
       }
     }

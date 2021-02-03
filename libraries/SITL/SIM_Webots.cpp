@@ -195,10 +195,9 @@ bool Webots::parse_sensors(const char *json)
                 //printf("Failed to parse Vector3f for  %s/%s\n", key.section, key.key);
                 return false;
             }
-            else
-            {
-                //printf("GOT  %s/%s [%f, %f, %f]\n", key.section, key.key, v->x, v->y, v->z);
-            }
+            
+                            //printf("GOT  %s/%s [%f, %f, %f]\n", key.section, key.key, v->x, v->y, v->z);
+           
             
             break;
         }
@@ -223,10 +222,9 @@ bool Webots::parse_sensors(const char *json)
                     //printf("Failed to parse Vector3f for %s/%s[%u]\n", key.section, key.key, n);
                     return false;
                 }
-                else
-                {
-                    //printf("GOT  %s/%s [%f, %f, %f]\n", key.section, key.key, v->data[n].x, v->data[n].y, v->data[n].z);
-                }
+                
+                                    //printf("GOT  %s/%s [%f, %f, %f]\n", key.section, key.key, v->data[n].x, v->data[n].y, v->data[n].z);
+               
                 n++;
                 p = strchr(p,']');
                 if (!p) {
