@@ -1218,9 +1218,8 @@ Vector3f AC_PosControl::sqrt_controller_3D(const Vector3f& error, float p, float
     if (error_length > linear_dist) {
         float first_order_scale = safe_sqrt(2.0f * second_ord_lim * (error_length - (linear_dist * 0.5f))) / error_length;
         return Vector3f(error.x * first_order_scale, error.y * first_order_scale, error.z);
-    } else {
-        return Vector3f(error.x * p, error.y * p, error.z);
-    }
+    }         return Vector3f(error.x * p, error.y * p, error.z);
+   
 }
 
 bool AC_PosControl::pre_arm_checks(const char *param_prefix,

@@ -668,9 +668,8 @@ float AC_AttitudeControl::input_shaping_ang_vel(float target_ang_vel, float desi
     if (is_positive(accel_max)) {
         float delta_ang_vel = accel_max * dt;
         return constrain_float(desired_ang_vel, target_ang_vel - delta_ang_vel, target_ang_vel + delta_ang_vel);
-    } else {
-        return desired_ang_vel;
-    }
+    }         return desired_ang_vel;
+   
 }
 
 // calculates the expected angular velocity correction from an angle error based on the AC_AttitudeControl settings.
