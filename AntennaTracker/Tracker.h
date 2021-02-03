@@ -220,7 +220,7 @@ private:
     uint8_t get_mode() const override { return (uint8_t)mode->number(); }
     bool should_log(uint32_t mask);
     bool start_command_callback(const AP_Mission::Mission_Command& cmd) { return false; }
-    void exit_mission_callback() { return; }
+    void exit_mission_callback() { }
     bool verify_command_callback(const AP_Mission::Mission_Command& cmd) { return false; }
 
     // tracking.cpp

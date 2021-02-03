@@ -123,7 +123,6 @@ void Tracker::update_tracking(void)
     // convert servo_out to radio_out and send to servo
     SRV_Channels::calc_pwm();
     SRV_Channels::output_ch_all();
-    return;
 }
 
 /**
