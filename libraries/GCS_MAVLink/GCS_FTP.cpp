@@ -559,7 +559,6 @@ void GCS_MAVLINK::ftp_worker(void) {
             ftp_push_replies(reply);
         }
 
-        continue;
     }
 }
 
