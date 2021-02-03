@@ -88,18 +88,16 @@ uint8_t AP_WheelEncoder_Quadrature::pin_ab_to_phase(bool pin_a, bool pin_b)
         if (!pin_b) {
             // A = 0, B = 0
             return 0;
-        } else {
-            // A = 0, B = 1
+        }             // A = 0, B = 1
             return 1;
-        }
+       
     } else {
         if (!pin_b) {
             // A = 1, B = 0
             return 3;
-        } else {
-            // A = 1, B = 1
+        }             // A = 1, B = 1
             return 2;
-        }
+       
     }
     return (uint8_t)pin_a << 1 | (uint8_t)pin_b;
 }
