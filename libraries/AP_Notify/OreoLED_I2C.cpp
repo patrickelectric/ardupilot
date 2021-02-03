@@ -116,10 +116,9 @@ bool OreoLED_I2C::slow_counter()
     _slow_count++;
     if (_slow_count < 5) {
         return true;
-    } else {
-        _slow_count = 0;
+    }         _slow_count = 0;
         return false;
-    }
+   
 }
 
 
@@ -131,9 +130,8 @@ bool OreoLED_I2C::mode_firmware_update()
     if (AP_Notify::flags.firmware_update) {
         set_macro(OREOLED_INSTANCE_ALL, OREOLED_PARAM_MACRO_COLOUR_CYCLE);
         return true;
-    } else {
-        return false;
-    }
+    }         return false;
+   
 }
 
 
@@ -143,9 +141,8 @@ bool OreoLED_I2C::mode_init()
     if (AP_Notify::flags.initialising) {
         set_rgb(OREOLED_INSTANCE_ALL, OREOLED_PATTERN_STROBE, 0, 0, 255,0,0,0,PERIOD_SUPER,0);
         return true;
-    } else {
-        return false;
-    }
+    }         return false;
+   
 }
 
 
@@ -188,7 +185,7 @@ bool OreoLED_I2C::set_standard_colors()
         _rear_color_b = 0;
         return true;
 
-    } else if (AP_Notify::flags.ekf_bad) {
+    } if (AP_Notify::flags.ekf_bad) {
         _rear_color_r = 255;
         _rear_color_g = 0;
         _rear_color_b = 255;

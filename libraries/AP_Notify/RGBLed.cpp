@@ -127,7 +127,7 @@ uint32_t RGBLed::get_colour_sequence(void) const
         if (AP_Notify::flags.leak_detected) {
             // purple if leak detected
             return sequence_failsafe_leak;
-        } else if (AP_Notify::flags.ekf_bad) {
+        } if (AP_Notify::flags.ekf_bad) {
             // red on if ekf bad
             return sequence_failsafe_ekf;
         } else if (AP_Notify::flags.gps_glitching) {
@@ -176,9 +176,8 @@ uint32_t RGBLed::get_colour_sequence_traffic_light(void) const
     if (hal.util->safety_switch_state() != AP_HAL::Util::SAFETY_DISARMED) {
         if (!AP_Notify::flags.pre_arm_check) {
             return DEFINE_COLOUR_SEQUENCE_ALTERNATE(YELLOW, BLACK);
-        } else {
-            return DEFINE_COLOUR_SEQUENCE_SLOW(YELLOW);
-        }
+        }             return DEFINE_COLOUR_SEQUENCE_SLOW(YELLOW);
+       
     }
 
     if (!AP_Notify::flags.pre_arm_check) {
