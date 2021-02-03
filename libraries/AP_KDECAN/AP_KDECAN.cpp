@@ -304,7 +304,7 @@ void AP_KDECAN::loop()
                                 _esc_max_node_id = MAX(_esc_max_node_id, id.source_id - ESC_NODE_ID_FIRST + 1);
                                 debug_can(AP_CANManager::LOG_DEBUG, "found ESC id %u", id.source_id);
                                 break;
-                            } else if (id.object_address != ENUM_OBJ_ADDR) {
+                            } if (id.object_address != ENUM_OBJ_ADDR) {
                                 // discardable frame, only looking for enumeration
                                 break;
                             }
@@ -330,7 +330,7 @@ void AP_KDECAN::loop()
                                     if (res == 1) {
                                         enumeration_esc_num++;
                                         break;
-                                    } else if (res == 0) {
+                                    } if (res == 0) {
                                         debug_can(AP_CANManager::LOG_ERROR, "strange buffer full when setting ESC node ID");
                                     } else {
                                         debug_can(AP_CANManager::LOG_ERROR, "error sending message to set ESC node ID, result %d", res);
