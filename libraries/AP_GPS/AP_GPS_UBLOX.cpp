@@ -1205,7 +1205,7 @@ AP_GPS_UBLOX::_parse_gps(void)
     if (_class == CLASS_RXM && _msg_id == MSG_RXM_RAW && gps._raw_data != 0) {
         log_rxm_raw(_buffer.rxm_raw);
         return false;
-    } else if (_class == CLASS_RXM && _msg_id == MSG_RXM_RAWX && gps._raw_data != 0) {
+    } if (_class == CLASS_RXM && _msg_id == MSG_RXM_RAWX && gps._raw_data != 0) {
         log_rxm_rawx(_buffer.rxm_rawx);
         return false;
     }
@@ -1598,12 +1598,11 @@ AP_GPS_UBLOX::_request_message_rate(uint8_t msg_class, uint8_t msg_id)
     if(_ublox_port >= UBLOX_MAX_PORTS) {
         _request_port();
         return false;
-    } else {
-        struct ubx_cfg_msg msg;
+    }         struct ubx_cfg_msg msg;
         msg.msg_class = msg_class;
         msg.msg_id    = msg_id;
         return _send_message(CLASS_CFG, MSG_CFG_MSG, &msg, sizeof(msg));
-    }
+   
 }
 
 /*
@@ -1774,9 +1773,8 @@ reset:
 			if (state.ck_b == data) {
 				// a valid UBlox packet
 				return true;
-			} else {
-				goto reset;
-			}
+			} 				goto reset;
+		
     }
     return false;
 }

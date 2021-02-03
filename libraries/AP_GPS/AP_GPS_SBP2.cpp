@@ -237,7 +237,7 @@ AP_GPS_SBP2::_attempt_state_update()
         Info("No Heartbeats from Piksi! Status to NO_FIX.");
         return false;
 
-    } else if (last_heartbeat.protocol_major != 2) {
+    } if (last_heartbeat.protocol_major != 2) {
 
         state.status = AP_GPS::NO_FIX;
         Info("Received a heartbeat from non-SBPv2 device. Current driver only supports SBPv2. Status to NO_FIX.");

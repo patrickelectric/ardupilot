@@ -279,9 +279,8 @@ reset:
             state.step = 0;
             if (state.ck_b == data) {
                 return true;
-            } else {
-                goto reset;
-            }
+            }                 goto reset;
+           
     }
     return false;
 }

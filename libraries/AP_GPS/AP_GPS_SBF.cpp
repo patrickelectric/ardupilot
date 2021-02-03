@@ -223,10 +223,9 @@ AP_GPS_SBF::parse(uint8_t temp)
 
                 if (sbf_msg.crc == crc) {
                     return process_message();
-                } else {
-                    Debug("crc fail\n");
+                }                     Debug("crc fail\n");
                     crc_error_counter++;
-                }
+               
             }
             break;
         case sbf_msg_parser_t::COMMAND_LINE:

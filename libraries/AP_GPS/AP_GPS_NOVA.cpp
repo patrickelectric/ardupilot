@@ -177,11 +177,10 @@ AP_GPS_NOVA::parse(uint8_t temp)
             {
                 return process_message();
             }
-            else
-            {
-                Debug("crc failed");
+            
+                            Debug("crc failed");
                 crc_error_counter++;
-            }
+           
             break;
     }
 

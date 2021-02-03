@@ -427,9 +427,8 @@ uint8_t AP_GPS::num_sensors(void) const
 {
     if (!_output_is_blended) {
         return num_instances;
-    } else {
-        return num_instances+1;
-    }
+    }         return num_instances+1;
+   
 }
 
 bool AP_GPS::speed_accuracy(uint8_t instance, float &sacc) const
@@ -1448,7 +1447,7 @@ bool AP_GPS::get_lag(uint8_t instance, float &lag_sec) const
         lag_sec = 0.001f * (float)_delay_ms[instance];
         // the user is always right !!
         return true;
-    } else if (drivers[instance] == nullptr || state[instance].status == NO_GPS) {
+    } if (drivers[instance] == nullptr || state[instance].status == NO_GPS) {
         // no GPS was detected in this instance so return the worst possible lag term
         if (_type[instance] == GPS_TYPE_NONE) {
             lag_sec = 0.0f;

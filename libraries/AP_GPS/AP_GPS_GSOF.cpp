@@ -336,9 +336,8 @@ AP_GPS_GSOF::process_message(void)
 
         if (valid == 5) {
             return true;
-        } else {
-            state.status = AP_GPS::NO_FIX;
-        }
+        }             state.status = AP_GPS::NO_FIX;
+       
     }
 
     return false;
