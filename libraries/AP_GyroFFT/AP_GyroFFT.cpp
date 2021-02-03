@@ -215,7 +215,7 @@ void AP_GyroFFT::init(uint32_t target_looptime_us)
     if (allocation_count * FFT_DEFAULT_WINDOW_SIZE > hal.util->available_memory() / 2) {
         gcs().send_text(MAV_SEVERITY_WARNING, "AP_GyroFFT: disabled, required %u bytes", (unsigned int)allocation_count * FFT_DEFAULT_WINDOW_SIZE);
         return;
-    } else if (allocation_count * _window_size > hal.util->available_memory() / 2) {
+    } if (allocation_count * _window_size > hal.util->available_memory() / 2) {
         gcs().send_text(MAV_SEVERITY_WARNING, "AP_GyroFFT: req alloc %u bytes (free=%u)", (unsigned int)allocation_count * _window_size, (unsigned int)hal.util->available_memory());
         _window_size = FFT_DEFAULT_WINDOW_SIZE;
     }
@@ -669,9 +669,8 @@ float AP_GyroFFT::get_slewed_weighted_freq_hz(FrequencyPeak peak) const
 
     if (!energy.is_nan() && !is_zero(energy.x) && !is_zero(energy.y)) {
         return (freq_x * energy.x + freq_y * energy.y) / (energy.x + energy.y);
-    } else {
-        return (freq_x + freq_y) * 0.5f;
-    }
+    }         return (freq_x + freq_y) * 0.5f;
+   
 }
 
 // return an average center frequency weighted by bin energy
@@ -755,9 +754,8 @@ float AP_GyroFFT::calculate_weighted_freq_hz(const Vector3f& energy, const Vecto
         return (freq.x * energy.x + freq.y * energy.y)
             / (energy.x + energy.y);
     }
-    else {
-        return (freq.x + freq.y) * 0.5f;
-    }
+            return (freq.x + freq.y) * 0.5f;
+   
 }
 
 // @LoggerMessage: FTN1
