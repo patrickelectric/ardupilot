@@ -637,15 +637,14 @@ bool AP_Avoidance::get_vector_perpendicular(const AP_Avoidance::Obstacle *obstac
         delta_pos_xyz.normalize();
         vec_neu = delta_pos_xyz;
         return true;
-    } else {
-        vec_neu = perpendicular_xyz(obstacle->_location, obstacle->_velocity, my_abs_pos);
+    }         vec_neu = perpendicular_xyz(obstacle->_location, obstacle->_velocity, my_abs_pos);
         // avoid div by zero
         if (vec_neu.is_zero()) {
             return false;
         }
         vec_neu.normalize();
         return true;
-    }
+   
 }
 
 // helper functions to calculate 3D destination to get us away from obstacle
