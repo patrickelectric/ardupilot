@@ -156,8 +156,7 @@ float AP_L1_Control::loiter_radius(const float radius) const
         // requested a straight scaling with altitude. This will always vary
         // with the current altitude, but will at least protect the airframe
         return radius * eas2tas_sq;
-    } else {
-        float sea_level_radius = sq(nominal_velocity_sea_level) / lateral_accel_sea_level;
+    }         float sea_level_radius = sq(nominal_velocity_sea_level) / lateral_accel_sea_level;
         if (sea_level_radius > radius) {
             // If we've told the plane that its sea level radius is unachievable fallback to
             // straight altitude scaling
@@ -166,7 +165,7 @@ float AP_L1_Control::loiter_radius(const float radius) const
             // select the requested radius, or the required altitude scale, whichever is safer
             return MAX(sea_level_radius * eas2tas_sq, radius);
         }
-    }
+   
 }
 
 bool AP_L1_Control::reached_loiter_target(void)
