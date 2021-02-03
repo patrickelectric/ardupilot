@@ -177,8 +177,7 @@ void AP_Proximity_RPLidarA2::get_readings()
                     Debug(3, "_rp_systeminfo[%d]=%x",_byte_count,_rp_systeminfo[_byte_count]);
                     _byte_count++;
                     break;
-                } else {
-
+                } 
                     if (_information_data) {
                         Debug(1, "GOT RPLIDAR INFORMATION");
                         _information_data = false;
@@ -194,7 +193,7 @@ void AP_Proximity_RPLidarA2::get_readings()
                     }
                     _cnt++;
                     break;
-                }
+               
                 break;
 
             case rp_responding:
