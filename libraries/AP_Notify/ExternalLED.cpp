@@ -240,5 +240,5 @@ void ExternalLED::motor_led2(bool on_off)
 }
 #else
 bool ExternalLED::init(void) {return true;}
-void ExternalLED::update(void) {return;}
+void ExternalLED::update(void) {}
 #endif
