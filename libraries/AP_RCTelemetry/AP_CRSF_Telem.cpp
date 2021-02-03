@@ -177,7 +177,7 @@ AP_RCProtocol_CRSF::RFMode AP_CRSF_Telem::get_rf_mode() const
 
     if (!_crsf_version.pending && _crsf_version.use_rf_mode) {
         return crsf->get_link_status().rf_mode;
-    } else if (_crsf_version.is_tracer) {
+    } if (_crsf_version.is_tracer) {
         return AP_RCProtocol_CRSF::RFMode::CRSF_RF_MODE_250HZ;
     }
 
