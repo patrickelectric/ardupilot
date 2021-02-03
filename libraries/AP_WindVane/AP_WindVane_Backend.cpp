@@ -59,5 +59,4 @@ void AP_WindVane_Backend::calibrate()
 {
     gcs().send_text(MAV_SEVERITY_INFO, "WindVane: No cal required");
     _frontend._calibration.set_and_save(0);
-    return;
 }
