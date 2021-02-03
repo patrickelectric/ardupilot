@@ -362,7 +362,7 @@ const char* SLCAN::CANIface::processCommand(char* cmd)
     */
     if (cmd[0] == 'T') {
         return handle_FrameDataExt(cmd) ? "Z\r" : "\a";
-    } else if (cmd[0] == 't') {
+    } if (cmd[0] == 't') {
         return handle_FrameDataStd(cmd) ? "z\r" : "\a";
     } else if (cmd[0] == 'R') {
         return handle_FrameRTRExt(cmd) ? "Z\r" : "\a";
@@ -651,7 +651,7 @@ int16_t SLCAN::CANIface::receive(AP_HAL::CANFrame& out_frame, uint64_t& rx_time,
             // and immediately return
             reportFrame(out_frame, AP_HAL::native_micros64());
             return ret;
-        } else if (ret < 0) {
+        } if (ret < 0) {
             return ret;
         }
     }
