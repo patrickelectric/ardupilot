@@ -408,7 +408,7 @@ RC_Channel::AuxSwitchPos AP_OSD_ParamScreen::get_channel_pos(uint8_t rcmapchan) 
 
     if (in < 1300) {
         return switch_reversed ? RC_Channel::AuxSwitchPos::HIGH : RC_Channel::AuxSwitchPos::LOW;
-    } else if (in > 1700) {
+    } if (in > 1700) {
         return switch_reversed ? RC_Channel::AuxSwitchPos::LOW : RC_Channel::AuxSwitchPos::HIGH;
     } else {
         return RC_Channel::AuxSwitchPos::MIDDLE;

@@ -302,12 +302,11 @@ bool AP_OSD_ParamSetting::set_by_name(const char* name, uint8_t config_type, flo
     if (param == nullptr) {
         // leave unchanged
         return false;
-    } else {
-        _current_token = token;
+    }         _current_token = token;
         _param_type = type;
         _param = param;
         enabled.set_and_save_ifchanged(true);
-    }
+   
 
     _type.set_and_save_ifchanged(config_type);
 
