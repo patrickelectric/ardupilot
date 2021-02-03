@@ -283,9 +283,8 @@ bool GCS_MAVLINK::send_battery_status()
             send_battery_status(battery_id);
             last_battery_status_idx = battery_id;
             return true;
-        } else {
-            last_battery_status_idx = battery_id;
-        }
+        }             last_battery_status_idx = battery_id;
+       
     }
     return true;
 }

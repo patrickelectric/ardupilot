@@ -585,9 +585,8 @@ int GCS_MAVLINK::gen_dir_entry(char *dest, size_t space, const char *path, const
             return -1;
         }
         return hal.util->snprintf(dest, space, "F%s\t%u\0", entry->d_name, (unsigned)st.st_size);
-    } else {
-        return hal.util->snprintf(dest, space, "D%s\0", entry->d_name);
-    }
+    }         return hal.util->snprintf(dest, space, "D%s\0", entry->d_name);
+   
 }
 
 // list the contents of a directory, skip the offset number of entries before providing data
