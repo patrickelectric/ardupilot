@@ -120,10 +120,9 @@ void wgsecef2llh(const Vector3d &ecef, Vector3d &llh) {
     /* Check for convergence and exit early if we have converged. */
     if (fabs(S - prev_S) < double(1e-16) && fabs(C - prev_C) < double(1e-16)) {
       break;
-    } else {
-      prev_S = S;
+    }       prev_S = S;
       prev_C = C;
-    }
+   
   }
 
   A_n = sqrt(S*S + C*C);

@@ -166,8 +166,7 @@ bool Vector2<T>::segment_intersection(const Vector2<T>& seg1_start, const Vector
     if (fabsf(r1xr2) < FLT_EPSILON) {
         // either collinear or parallel and non-intersecting
         return false;
-    } else {
-        // t = (q - p) * s / (r * s)
+    }         // t = (q - p) * s / (r * s)
         // u = (q - p) * r / (r * s)
         const float t = (ss2_ss1 % r2) / r1xr2;
         const float u = q_pxr / r1xr2;
@@ -181,7 +180,7 @@ bool Vector2<T>::segment_intersection(const Vector2<T>& seg1_start, const Vector
             // non-parallel and non-intersecting
             return false;
         }
-    }
+   
 }
 
 // find the intersection between a line segment and a circle
@@ -332,7 +331,7 @@ Vector2<T> Vector2<T>::closest_point(const Vector2<T> &p, const Vector2<T> &v, c
     const float t = ((p - v) * (w - v)) / l2;
     if (t <= 0) {
         return v;
-    } else if (t >= 1) {
+    } if (t >= 1) {
         return w;
     } else {
         return v + (w - v)*t;
@@ -356,7 +355,7 @@ Vector2<T> Vector2<T>::closest_point(const Vector2<T> &p, const Vector2<T> &w)
     const float t = (p * w) / l2;
     if (t <= 0) {
         return Vector2<T>(0,0);
-    } else if (t >= 1) {
+    } if (t >= 1) {
         return w;
     } else {
         return w*t;

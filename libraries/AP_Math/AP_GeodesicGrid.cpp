@@ -231,7 +231,7 @@ int AP_GeodesicGrid::_from_neighbor_umbrella(int idx,
                 return -1;
             }
             return comp;
-        } else if (x0 < 0) {
+        } if (x0 < 0) {
             if (!inclusive) {
                 return -1;
             }
@@ -257,7 +257,7 @@ int AP_GeodesicGrid::_from_neighbor_umbrella(int idx,
                 return -1;
             }
             return _neighbor_umbrella_component(idx, x1 < 0 ? 2 : 1);
-        } else if (x1 < 0) {
+        } if (x1 < 0) {
             return _neighbor_umbrella_component(idx, 2);
         }
 
@@ -266,13 +266,12 @@ int AP_GeodesicGrid::_from_neighbor_umbrella(int idx,
                 return -1;
             }
             return _neighbor_umbrella_component(idx, x2 > 0 ? 1 : 0);
-        } else if (x2 < 0) {
+        } if (x2 < 0) {
             return _neighbor_umbrella_component(idx, 0);
         }
 
         return comp;
-    } else {
-        /* If the coefficient of the second vertex is lesser than the first
+    }         /* If the coefficient of the second vertex is lesser than the first
          * one's, then v crosses the first, fourth or fifth component. */
         int comp = _neighbor_umbrella_component(idx, 4);
         auto w = _inverses[comp % 10] * v;
@@ -301,7 +300,7 @@ int AP_GeodesicGrid::_from_neighbor_umbrella(int idx,
         }
 
         return comp;
-    }
+   
 }
 
 int AP_GeodesicGrid::_triangle_index(const Vector3f &v, bool inclusive)
