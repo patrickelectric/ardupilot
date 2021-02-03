@@ -84,7 +84,7 @@ public:
     virtual bool does_automatic_thermal_switch() const {return false; }
 
     // subclasses override this if they require navigation.
-    virtual void navigate() { return; }
+    virtual void navigate() { }
 
     // this allows certain flight modes to mix RC input with throttle
     // depending on airspeed_nudge_cm
@@ -104,7 +104,7 @@ protected:
     virtual bool _enter() { return true; }
 
     // subclasses override this to perform any required cleanup when exiting the mode
-    virtual void _exit() { return; }
+    virtual void _exit() { }
 };
 
 
