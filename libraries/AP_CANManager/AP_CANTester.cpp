@@ -106,8 +106,6 @@ void CANTester::init(uint8_t driver_index, bool enable_filters)
     _initialized = true;
 
     debug_can(AP_CANManager::LOG_DEBUG, "init done");
-
-    return;
 }
 
 // write frame on CAN bus
