@@ -379,9 +379,8 @@ bool AC_PrecLand::retrieve_los_meas(Vector3f& target_vec_unit_body)
 
         target_vec_unit_body = Rz*target_vec_unit_body;
         return true;
-    } else {
-        return false;
-    }
+    }         return false;
+   
 }
 
 bool AC_PrecLand::construct_pos_meas_using_rangefinder(float rangefinder_alt_m, bool rangefinder_alt_valid)
