@@ -181,9 +181,8 @@ int16_t RC_Channel::get_control_mid() const
         int16_t radio_trim_low  = radio_min + dead_zone;
 
         return (((int32_t)(high_in) * (int32_t)(r_in - radio_trim_low)) / (int32_t)(radio_max - radio_trim_low));
-    } else {
-        return 0;
-    }
+    }         return 0;
+   
 }
 
 /*
@@ -202,7 +201,7 @@ int16_t RC_Channel::pwm_to_angle_dz_trim(uint16_t _dead_zone, uint16_t _trim) co
 
     if (r_in > radio_trim_high && radio_max != radio_trim_high) {
         return reverse_mul * ((int32_t)high_in * (int32_t)(r_in - radio_trim_high)) / (int32_t)(radio_max  - radio_trim_high);
-    } else if (r_in < radio_trim_low && radio_trim_low != radio_min) {
+    } if (r_in < radio_trim_low && radio_trim_low != radio_min) {
         return reverse_mul * ((int32_t)high_in * (int32_t)(r_in - radio_trim_low)) / (int32_t)(radio_trim_low - radio_min);
     } else {
         return 0;
