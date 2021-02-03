@@ -1810,7 +1810,7 @@ bool AP_Mission::get_next_do_cmd(uint16_t start_index, Mission_Command& cmd)
     if (!get_next_cmd(start_index, temp_cmd, false)) {
         // no more commands so return failure
         return false;
-    } else if (is_nav_cmd(temp_cmd)) {
+    } if (is_nav_cmd(temp_cmd)) {
         // if it's a "navigation" command then return false because we do not progress past nav commands
         return false;
     } else {
@@ -1846,7 +1846,7 @@ int16_t AP_Mission::get_jump_times_run(const Mission_Command& cmd)
     for (uint8_t i=0; i<AP_MISSION_MAX_NUM_DO_JUMP_COMMANDS; i++) {
         if (_jump_tracking[i].index == cmd.index) {
             return _jump_tracking[i].num_times_run;
-        } else if (_jump_tracking[i].index == AP_MISSION_CMD_INDEX_NONE) {
+        } if (_jump_tracking[i].index == AP_MISSION_CMD_INDEX_NONE) {
             // we've searched through all known jump commands and haven't found it so allocate new space in _jump_tracking array
             _jump_tracking[i].index = cmd.index;
             _jump_tracking[i].num_times_run = 0;
@@ -1876,7 +1876,7 @@ void AP_Mission::increment_jump_times_run(Mission_Command& cmd, bool send_gcs_ms
                 gcs().send_text(MAV_SEVERITY_INFO, "Mission: %u Jump %i/%i", _jump_tracking[i].index, _jump_tracking[i].num_times_run, cmd.content.jump.num_times);
             }
             return;
-        } else if (_jump_tracking[i].index == AP_MISSION_CMD_INDEX_NONE) {
+        } if (_jump_tracking[i].index == AP_MISSION_CMD_INDEX_NONE) {
             // we've searched through all known jump commands and haven't found it so allocate new space in _jump_tracking array
             _jump_tracking[i].index = cmd.index;
             _jump_tracking[i].num_times_run = 1;
@@ -2065,10 +2065,9 @@ bool AP_Mission::is_best_land_sequence(void)
         // then the mission should carry on uninterrupted as that is the shorter distance
         gcs().send_text(MAV_SEVERITY_NOTICE, "Rejecting RTL: closer land if mis continued");
         return true;
-    } else {
-        // allow failsafes to interrupt the current mission
+    }         // allow failsafes to interrupt the current mission
         return false;
-    }
+   
 }
 
 // Approximate the distance travelled to get to a landing.  DO_JUMP commands are observed in look forward.
@@ -2096,7 +2095,7 @@ bool AP_Mission::distance_to_landing(uint16_t index, float &tot_distance, Locati
             }
             if (temp_cmd.id == MAV_CMD_NAV_WAYPOINT || temp_cmd.id == MAV_CMD_NAV_SPLINE_WAYPOINT || is_landing_type_cmd(temp_cmd.id)) {
                 break;
-            } else if (is_nav_cmd(temp_cmd) || temp_cmd.id == MAV_CMD_CONDITION_DELAY) {
+            } if (is_nav_cmd(temp_cmd) || temp_cmd.id == MAV_CMD_CONDITION_DELAY) {
                 // if we receive a nav command that we dont handle then give up as cant measure the distance e.g. MAV_CMD_NAV_LOITER_UNLIM
                 ret = false;
                 goto reset_do_jump_tracking;
