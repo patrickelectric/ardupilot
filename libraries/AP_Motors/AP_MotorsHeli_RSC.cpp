@@ -399,9 +399,8 @@ void AP_MotorsHeli_RSC::write_rsc(float servo_out)
         // do not do servo output to avoid conflicting with other output on the channel
         // ToDo: We should probably use RC_Channel_Aux to avoid this problem
         return;
-    } else {
-        SRV_Channels::set_output_scaled(_aux_fn, (uint16_t) (servo_out * 1000));
-    }
+    }         SRV_Channels::set_output_scaled(_aux_fn, (uint16_t) (servo_out * 1000));
+   
 }
 
     // calculate_desired_throttle - uses throttle curve and collective input to determine throttle setting
