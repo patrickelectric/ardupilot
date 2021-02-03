@@ -121,7 +121,7 @@ public:
         
     public:
         // we just poll fd, no signaling is done
-        void signal(uint32_t evt_mask) override { return; }
+        void signal(uint32_t evt_mask) override { }
         bool wait(uint64_t duration, AP_HAL::EventHandle* evt_handle) override;
     };
 
