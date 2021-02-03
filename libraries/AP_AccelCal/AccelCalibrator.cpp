@@ -158,9 +158,8 @@ bool AccelCalibrator::accept_result() const {
         _param.s.diag.y < 0.8f || _param.s.diag.y > 1.2f ||
         _param.s.diag.z < 0.8f || _param.s.diag.z > 1.2f) {
         return false;
-    } else {
-        return true;
-    }
+    }         return true;
+   
 }
 
 // interface for LSq estimator to read sample buffer sent after conversion from delta velocity
