@@ -100,10 +100,9 @@ T ModeFilter<T,FILTER_SIZE>::        apply(T sample)
     if( FilterWithBuffer<T,FILTER_SIZE>::sample_index < FILTER_SIZE ) {
         // middle sample if buffer is not yet full
         return _output = FilterWithBuffer<T,FILTER_SIZE>::samples[(FilterWithBuffer<T,FILTER_SIZE>::sample_index / 2)];
-    }else{
-        // return element specified by user in constructor
+    }        // return element specified by user in constructor
         return _output = FilterWithBuffer<T,FILTER_SIZE>::samples[_return_element];
-    }
+   
 }
 
 //
