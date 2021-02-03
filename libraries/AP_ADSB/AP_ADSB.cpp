@@ -478,7 +478,7 @@ void AP_ADSB::handle_adsb_vehicle(const adsb_vehicle_t &vehicle)
         }
         return;
 
-    } else if (is_tracked_in_list) {
+    } if (is_tracked_in_list) {
 
         // found, update it
         set_vehicle(index, vehicle);
@@ -553,11 +553,10 @@ void AP_ADSB::send_adsb_vehicle(const mavlink_channel_t chan)
         if (now - in_state.send_start_ms[chan] < 1000) {
             // too soon to start a new one
             return;
-        } else {
-            // start new list
+        }             // start new list
             in_state.send_start_ms[chan] = now;
             in_state.send_index[chan] = 0;
-        }
+       
     }
 
     if (in_state.send_index[chan] < in_state.vehicle_count) {
