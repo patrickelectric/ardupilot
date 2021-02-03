@@ -801,9 +801,8 @@ float ModeGuided::crosstrack_error() const
 {
     if (mode() == Guided_WP) {
         return wp_nav->crosstrack_error();
-    } else {
-        return 0;
-    }
+    }         return 0;
+   
 }
 
 #endif

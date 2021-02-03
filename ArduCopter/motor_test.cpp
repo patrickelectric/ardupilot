@@ -143,8 +143,7 @@ MAV_RESULT Copter::mavlink_motor_test_start(const GCS_MAVLINK &gcs_chan, uint8_t
         */
         if (!mavlink_motor_test_check(gcs_chan, throttle_type != 1)) {
             return MAV_RESULT_FAILED;
-        } else {
-            // start test
+        }             // start test
             ap.motor_test = true;
 
             EXPECT_DELAY_MS(3000);
@@ -163,7 +162,7 @@ MAV_RESULT Copter::mavlink_motor_test_start(const GCS_MAVLINK &gcs_chan, uint8_t
 
             // turn on notify leds
             AP_Notify::flags.esc_calibration = true;
-        }
+       
     }
 
     // set timeout

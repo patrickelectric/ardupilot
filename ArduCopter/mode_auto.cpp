@@ -54,9 +54,8 @@ bool ModeAuto::init(bool ignore_checks)
         }
 
         return true;
-    } else {
-        return false;
-    }
+    }         return false;
+   
 }
 
 // auto_run - runs the auto controller
@@ -1669,7 +1668,7 @@ bool ModeAuto::verify_payload_place()
             // we've only just now hit the correct throttle level
             nav_payload_place.place_start_timestamp = now;
             return false;
-        } else if (now - nav_payload_place.place_start_timestamp < placed_time) {
+        } if (now - nav_payload_place.place_start_timestamp < placed_time) {
             // keep going down....
             debug("Place Timer: %d", now - nav_payload_place.place_start_timestamp);
             return false;

@@ -271,9 +271,8 @@ bool ModeThrow::throw_detected()
     // start motors and enter the control mode if we are in continuous freefall
     if (throw_condition_confirmed) {
         return true;
-    } else {
-        return false;
-    }
+    }         return false;
+   
 }
 
 bool ModeThrow::throw_attitude_good()

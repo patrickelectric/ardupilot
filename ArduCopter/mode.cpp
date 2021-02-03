@@ -768,10 +768,9 @@ Mode::AltHoldModeState Mode::get_alt_hold_state(float target_climb_rate_cms)
             // the aircraft is waiting in ground idle
             return AltHold_Landed_Ground_Idle;
 
-        } else {
-            // the aircraft can leave the ground at any time
+        }             // the aircraft can leave the ground at any time
             return AltHold_Landed_Pre_Takeoff;
-        }
+       
 
     } else {
         // the aircraft is in a flying state

@@ -342,10 +342,9 @@ bool Copter::ekf_has_absolute_position() const
     // if disarmed we accept a predicted horizontal position
     if (!motors->armed()) {
         return ((filt_status.flags.horiz_pos_abs || filt_status.flags.pred_horiz_pos_abs));
-    } else {
-        // once armed we require a good absolute position and EKF must not be in const_pos_mode
+    }         // once armed we require a good absolute position and EKF must not be in const_pos_mode
         return (filt_status.flags.horiz_pos_abs && !filt_status.flags.const_pos_mode);
-    }
+   
 }
 
 // ekf_has_relative_position - returns true if the EKF can provide a position estimate relative to it's starting position
@@ -378,9 +377,8 @@ bool Copter::ekf_has_relative_position() const
     // if disarmed we accept a predicted horizontal relative position
     if (!motors->armed()) {
         return (filt_status.flags.pred_horiz_pos_rel);
-    } else {
-        return (filt_status.flags.horiz_pos_rel && !filt_status.flags.const_pos_mode);
-    }
+    }         return (filt_status.flags.horiz_pos_rel && !filt_status.flags.const_pos_mode);
+   
 }
 
 // returns true if the ekf has a good altitude estimate (required for modes which do AltHold)
