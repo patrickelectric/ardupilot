@@ -451,8 +451,7 @@ bool SoaringController::check_drift(Vector2f prev_wp, Vector2f next_wp)
     if (prev_wp.is_zero() || mission_leg.length() < 0.1) {
         // Simple check of distance from initial start point.
         return (position - start_pos).length() > max_drift;
-    } else {
-        // Regard the effective start point as projected onto mission leg.
+    }         // Regard the effective start point as projected onto mission leg.
         // Calculate drift parallel and perpendicular to mission leg.
         // Drift parallel and in direction of mission leg is acceptable.
         Vector2f effective_start, vec1, vec2;
@@ -477,7 +476,7 @@ bool SoaringController::check_drift(Vector2f prev_wp, Vector2f next_wp)
         parallel = parallel>0 ? 0 : parallel;
 
         return (powf(parallel,2)+powf(perpendicular,2)) > powf(max_drift,2);;
-    }
+   
 }
 
 float SoaringController::get_thermalling_radius() const
