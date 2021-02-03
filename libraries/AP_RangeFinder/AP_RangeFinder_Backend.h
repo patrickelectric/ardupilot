@@ -31,9 +31,9 @@ public:
     // update the state structure
     virtual void update() = 0;
 
-    virtual void handle_msg(const mavlink_message_t &msg) { return; }
+    virtual void handle_msg(const mavlink_message_t &msg) { }
 #if HAL_MSP_RANGEFINDER_ENABLED
-    virtual void handle_msp(const MSP::msp_rangefinder_data_message_t &pkt) { return; }
+    virtual void handle_msp(const MSP::msp_rangefinder_data_message_t &pkt) { }
 #endif
 
     enum Rotation orientation() const { return (Rotation)params.orientation.get(); }
