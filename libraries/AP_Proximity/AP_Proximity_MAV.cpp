@@ -95,7 +95,6 @@ void AP_Proximity_MAV::handle_distance_sensor_msg(const mavlink_message_t &msg)
         _distance_upward = packet.current_distance * 0.01f;
         _last_upward_update_ms = AP_HAL::millis();
     }
-    return;
 }
 
 // handle mavlink OBSTACLE_DISTANCE messages
@@ -189,7 +188,6 @@ void AP_Proximity_MAV::handle_obstacle_distance_msg(const mavlink_message_t &msg
     } else {
         boundary.reset_face(face);
     }
-    return;
 }
 
 // handle mavlink OBSTACLE_DISTANCE_3D messages
@@ -248,5 +246,4 @@ void AP_Proximity_MAV::handle_obstacle_distance_3d_msg(const mavlink_message_t &
     if (database_ready) {
         database_push(yaw, pitch, obstacle.length(),_last_update_ms, current_pos, body_to_ned);
     }
-    return;
 }
