@@ -98,8 +98,7 @@ static int getjump (FuncState *fs, int pc) {
   int offset = GETARG_sBx(fs->f->code[pc]);
   if (offset == NO_JUMP)  /* point to itself represents end of list */
     return NO_JUMP;  /* end of list */
-  else
-    return (pc+1)+offset;  /* turn offset into absolute position */
+      return (pc+1)+offset;  /* turn offset into absolute position */
 }
 
 
@@ -122,7 +121,7 @@ static void fixjump (FuncState *fs, int pc, int dest) {
 */
 void luaK_concat (FuncState *fs, int *l1, int l2) {
   if (l2 == NO_JUMP) return;  /* nothing to concatenate? */
-  else if (*l1 == NO_JUMP)  /* no original list? */
+  if (*l1 == NO_JUMP)  /* no original list? */
     *l1 = l2;  /* 'l1' points to 'l2' */
   else {
     int list = *l1;
@@ -187,8 +186,7 @@ static Instruction *getjumpcontrol (FuncState *fs, int pc) {
   Instruction *pi = &fs->f->code[pc];
   if (pc >= 1 && testTMode(GET_OPCODE(*(pi-1))))
     return pi-1;
-  else
-    return pi;
+      return pi;
 }
 
 
@@ -353,11 +351,10 @@ static int codeextraarg (FuncState *fs, int a) {
 int luaK_codek (FuncState *fs, int reg, int k) {
   if (k <= MAXARG_Bx)
     return luaK_codeABx(fs, OP_LOADK, reg, k);
-  else {
-    int p = luaK_codeABx(fs, OP_LOADKX, reg, 0);
+      int p = luaK_codeABx(fs, OP_LOADKX, reg, 0);
     codeextraarg(fs, k);
     return p;
-  }
+ 
 }
 
 
@@ -775,7 +772,7 @@ int luaK_exp2RK (FuncState *fs, expdesc *e) {
       e->k = VK;
       if (e->u.info <= MAXINDEXRK)  /* constant fits in 'argC'? */
         return RKASK(e->u.info);
-      else break;
+      break;
     default: break;
   }
   /* not a constant in the right range: put it in a register */

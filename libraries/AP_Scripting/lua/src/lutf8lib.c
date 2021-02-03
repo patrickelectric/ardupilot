@@ -29,7 +29,7 @@
 /* translate a relative string position: negative means back from end */
 static lua_Integer u_posrelat (lua_Integer pos, size_t len) {
   if (pos >= 0) return pos;
-  else if (0u - (size_t)pos > len) return 0;
+  if (0u - (size_t)pos > len) return 0;
   else return (lua_Integer)len + pos + 1;
 }
 
@@ -210,15 +210,14 @@ static int iter_aux (lua_State *L) {
   }
   if (n >= (lua_Integer)len)
     return 0;  /* no more codepoints */
-  else {
-    int code;
+      int code;
     const char *next = utf8_decode(s + n, &code);
     if (next == NULL || iscont(next))
       return luaL_error(L, "invalid UTF-8 code");
     lua_pushinteger(L, n + 1);
     lua_pushinteger(L, code);
     return 2;
-  }
+ 
 }
 
 

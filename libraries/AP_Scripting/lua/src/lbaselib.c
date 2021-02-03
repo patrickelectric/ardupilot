@@ -76,13 +76,12 @@ static int luaB_tonumber (lua_State *L) {
       lua_settop(L, 1);  /* yes; return it */
       return 1;
     }
-    else {
-      size_t l;
+          size_t l;
       const char *s = lua_tolstring(L, 1, &l);
       if (s != NULL && lua_stringtonumber(L, s) == l + 1)
         return 1;  /* successful conversion to number */
       /* else not a number */
-    }
+   
   }
   else {
     size_t l;
@@ -231,10 +230,9 @@ static int luaB_next (lua_State *L) {
   lua_settop(L, 2);  /* create a 2nd argument if there isn't one */
   if (lua_next(L, 1))
     return 2;
-  else {
-    lua_pushnil(L);
+      lua_pushnil(L);
     return 1;
-  }
+ 
 }
 
 
@@ -279,11 +277,11 @@ static int load_aux (lua_State *L, int status, int envidx) {
     }
     return 1;
   }
-  else {  /* error (message is on top of the stack) */
+   /* error (message is on top of the stack) */
     lua_pushnil(L);
     lua_insert(L, -2);  /* put before error message */
     return 2;  /* return nil plus error message */
-  }
+ 
 }
 
 
@@ -327,7 +325,7 @@ static const char *generic_reader (lua_State *L, void *ud, size_t *size) {
     *size = 0;
     return NULL;
   }
-  else if (!lua_isstring(L, -1))
+  if (!lua_isstring(L, -1))
     luaL_error(L, "reader function must return a string");
   lua_replace(L, RESERVEDSLOT);  /* save string in reserved slot */
   return lua_tolstring(L, RESERVEDSLOT, size);
@@ -375,13 +373,13 @@ static int luaB_dofile (lua_State *L) {
 static int luaB_assert (lua_State *L) {
   if (lua_toboolean(L, 1))  /* condition is true? */
     return lua_gettop(L);  /* return all arguments */
-  else {  /* error */
+   /* error */
     luaL_checkany(L, 1);  /* there must be a condition */
     lua_remove(L, 1);  /* remove it */
     lua_pushliteral(L, "assertion failed!");  /* default message */
     lua_settop(L, 1);  /* leave only message (default if no other one) */
     return luaB_error(L);  /* call 'error' */
-  }
+ 
 }
 
 
@@ -391,13 +389,12 @@ static int luaB_select (lua_State *L) {
     lua_pushinteger(L, n-1);
     return 1;
   }
-  else {
-    lua_Integer i = luaL_checkinteger(L, 1);
+      lua_Integer i = luaL_checkinteger(L, 1);
     if (i < 0) i = n + i;
     else if (i > n) i = n;
     luaL_argcheck(L, 1 <= i, 1, "index out of range");
     return n - (int)i;
-  }
+ 
 }
 
 
@@ -414,8 +411,7 @@ static int finishpcall (lua_State *L, int status, lua_KContext extra) {
     lua_pushvalue(L, -2);  /* error message */
     return 2;  /* return false, msg */
   }
-  else
-    return lua_gettop(L) - (int)extra;  /* return all results */
+      return lua_gettop(L) - (int)extra;  /* return all results */
 }
 
 

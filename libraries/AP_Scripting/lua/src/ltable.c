@@ -109,10 +109,10 @@ static int l_hashfloat (lua_Number n) {
     lua_assert(luai_numisnan(n) || l_mathop(fabs)(n) == cast_num(HUGE_VAL));
     return 0;
   }
-  else {  /* normal case */
+   /* normal case */
     unsigned int u = cast(unsigned int, i) + cast(unsigned int, ni);
     return cast_int(u <= cast(unsigned int, INT_MAX) ? u : ~u);
-  }
+ 
 }
 #endif
 
@@ -169,8 +169,7 @@ static unsigned int findindex (lua_State *L, Table *t, StkId key) {
   i = arrayindex(key);
   if (i != 0 && i <= t->sizearray)  /* is 'key' inside array part? */
     return i;  /* yes; that's the index */
-  else {
-    int nx;
+      int nx;
     Node *n = mainposition(t, key);
     for (;;) {  /* check whether 'key' is somewhere in the chain */
       /* key may be dead already, but it is ok to use it in 'next' */
@@ -186,7 +185,7 @@ static unsigned int findindex (lua_State *L, Table *t, StkId key) {
         luaG_runerror(L, "invalid key to 'next'");  /* key not found */
       else n += nx;
     }
-  }
+ 
 }
 
 
@@ -253,8 +252,7 @@ static int countint (const TValue *key, unsigned int *nums) {
     nums[luaO_ceillog2(k)]++;  /* count as such */
     return 1;
   }
-  else
-    return 0;
+      return 0;
 }
 
 
@@ -524,8 +522,7 @@ const TValue *luaH_getint (Table *t, lua_Integer key) {
   /* (1 <= key && key <= t->sizearray) */
   if (l_castS2U(key) - 1 < t->sizearray)
     return &t->array[key - 1];
-  else {
-    Node *n = hashint(t, key);
+      Node *n = hashint(t, key);
     for (;;) {  /* check whether 'key' is somewhere in the chain */
       if (ttisinteger(gkey(n)) && ivalue(gkey(n)) == key)
         return gval(n);  /* that's it */
@@ -536,7 +533,7 @@ const TValue *luaH_getint (Table *t, lua_Integer key) {
       }
     }
     return luaO_nilobject;
-  }
+ 
 }
 
 
@@ -550,12 +547,11 @@ const TValue *luaH_getshortstr (Table *t, TString *key) {
     const TValue *k = gkey(n);
     if (ttisshrstring(k) && eqshrstr(tsvalue(k), key))
       return gval(n);  /* that's it */
-    else {
-      int nx = gnext(n);
+          int nx = gnext(n);
       if (nx == 0)
         return luaO_nilobject;  /* not found */
       n += nx;
-    }
+   
   }
 }
 
@@ -569,12 +565,11 @@ static const TValue *getgeneric (Table *t, const TValue *key) {
   for (;;) {  /* check whether 'key' is somewhere in the chain */
     if (luaV_rawequalobj(gkey(n), key))
       return gval(n);  /* that's it */
-    else {
-      int nx = gnext(n);
+          int nx = gnext(n);
       if (nx == 0)
         return luaO_nilobject;  /* not found */
       n += nx;
-    }
+   
   }
 }
 
@@ -582,11 +577,11 @@ static const TValue *getgeneric (Table *t, const TValue *key) {
 const TValue *luaH_getstr (Table *t, TString *key) {
   if (key->tt == LUA_TSHRSTR)
     return luaH_getshortstr(t, key);
-  else {  /* for long strings, use generic case */
+   /* for long strings, use generic case */
     TValue ko;
     setsvalue(cast(lua_State *, NULL), &ko, key);
     return getgeneric(t, &ko);
-  }
+ 
 }
 
 
@@ -618,7 +613,7 @@ TValue *luaH_set (lua_State *L, Table *t, const TValue *key) {
   const TValue *p = luaH_get(t, key);
   if (p != luaO_nilobject)
     return cast(TValue *, p);
-  else return luaH_newkey(L, t, key);
+  return luaH_newkey(L, t, key);
 }
 
 
@@ -677,7 +672,7 @@ lua_Unsigned luaH_getn (Table *t) {
     return i;
   }
   /* else must find a boundary in hash part */
-  else if (isdummy(t))  /* hash part is empty? */
+  if (isdummy(t))  /* hash part is empty? */
     return j;  /* that is easy... */
   else return unbound_search(t, j);
 }

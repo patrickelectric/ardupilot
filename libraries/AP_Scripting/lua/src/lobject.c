@@ -131,7 +131,7 @@ void luaO_arith (lua_State *L, int op, const TValue *p1, const TValue *p2,
         setivalue(res, intarith(L, op, i1, i2));
         return;
       }
-      else break;  /* go to the end */
+      break;  /* go to the end */
     }
     case LUA_OPDIV: case LUA_OPPOW: {  /* operate only on floats */
       lua_Number n1; lua_Number n2;
@@ -139,7 +139,7 @@ void luaO_arith (lua_State *L, int op, const TValue *p1, const TValue *p2,
         setfltvalue(res, numarith(L, op, n1, n2));
         return;
       }
-      else break;  /* go to the end */
+      break;  /* go to the end */
     }
     default: {  /* other operations */
       lua_Number n1; lua_Number n2;
@@ -147,7 +147,7 @@ void luaO_arith (lua_State *L, int op, const TValue *p1, const TValue *p2,
         setivalue(res, intarith(L, op, ivalue(p1), ivalue(p2)));
         return;
       }
-      else if (tonumber(p1, &n1) && tonumber(p2, &n2)) {
+      if (tonumber(p1, &n1) && tonumber(p2, &n2)) {
         setfltvalue(res, numarith(L, op, n1, n2));
         return;
       }
@@ -162,13 +162,13 @@ void luaO_arith (lua_State *L, int op, const TValue *p1, const TValue *p2,
 
 int luaO_hexavalue (int c) {
   if (lisdigit(c)) return c - '0';
-  else return (ltolower(c) - 'a') + 10;
+  return (ltolower(c) - 'a') + 10;
 }
 
 
 static int isneg (const char **s) {
   if (**s == '-') { (*s)++; return 1; }
-  else if (**s == '+') (*s)++;
+  if (**s == '+') (*s)++;
   return 0;
 }
 
@@ -321,10 +321,9 @@ static const char *l_str2int (const char *s, lua_Integer *result) {
   }
   while (lisspace(cast_uchar(*s))) s++;  /* skip trailing spaces */
   if (empty || *s != '\0') return NULL;  /* something wrong in the numeral */
-  else {
-    *result = l_castU2S((neg) ? 0u - a : a);
+      *result = l_castU2S((neg) ? 0u - a : a);
     return s;
-  }
+ 
 }
 
 

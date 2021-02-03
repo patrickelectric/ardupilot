@@ -69,7 +69,7 @@ static int str_len (lua_State *L) {
 /* translate a relative string position: negative means back from end */
 static lua_Integer posrelat (lua_Integer pos, size_t len) {
   if (pos >= 0) return pos;
-  else if (0u - (size_t)pos > len) return 0;
+  if (0u - (size_t)pos > len) return 0;
   else return (lua_Integer)len + pos + 1;
 }
 
@@ -333,15 +333,14 @@ static int singlematch (MatchState *ms, const char *s, const char *p,
                         const char *ep) {
   if (s >= ms->src_end)
     return 0;
-  else {
-    int c = uchar(*s);
+      int c = uchar(*s);
     switch (*p) {
       case '.': return 1;  /* matches any char */
       case L_ESC: return match_class(c, uchar(*(p+1)));
       case '[': return matchbracketclass(c, p, ep-1);
       default:  return (uchar(*p) == c);
     }
-  }
+ 
 }
 
 
@@ -386,7 +385,7 @@ static const char *min_expand (MatchState *ms, const char *s,
     const char *res = match(ms, s, ep+1);
     if (res != NULL)
       return res;
-    else if (singlematch(ms, s, p, ep))
+    if (singlematch(ms, s, p, ep))
       s++;  /* try with one more repetition */
     else return NULL;
   }
@@ -425,7 +424,7 @@ static const char *match_capture (MatchState *ms, const char *s, int l) {
   if ((size_t)(ms->src_end-s) >= len &&
       memcmp(ms->capture[l].init, s, len) == 0)
     return s+len;
-  else return NULL;
+  return NULL;
 }
 
 
@@ -535,7 +534,7 @@ static const char *match (MatchState *ms, const char *s, const char *p) {
 static const char *lmemfind (const char *s1, size_t l1,
                                const char *s2, size_t l2) {
   if (l2 == 0) return s1;  /* empty strings are everywhere */
-  else if (l2 > l1) return NULL;  /* avoids a negative 'l1' */
+  if (l2 > l1) return NULL;  /* avoids a negative 'l1' */
   else {
     const char *init;  /* to search for a '*s2' inside 's1' */
     l2--;  /* 1st char will be checked by 'memchr' */
@@ -648,8 +647,7 @@ static int str_find_aux (lua_State *L, int find) {
           lua_pushinteger(L, res - s);   /* end */
           return push_captures(&ms, NULL, 0) + 2;
         }
-        else
-          return push_captures(&ms, s1, res);
+                  return push_captures(&ms, s1, res);
       }
     } while (s1++ < ms.src_end && !anchor);
   }
@@ -1189,13 +1187,12 @@ static int digit (int c) { return '0' <= c && c <= '9'; }
 static int getnum (const char **fmt, int df) {
   if (!digit(**fmt))  /* no number? */
     return df;  /* return default value */
-  else {
-    int a = 0;
+      int a = 0;
     do {
       a = a*10 + (*((*fmt)++) - '0');
     } while (digit(**fmt) && a <= ((int)MAXSIZE - 9)/10);
     return a;
-  }
+ 
 }
 
 

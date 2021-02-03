@@ -128,7 +128,7 @@ LUA_API int lua_getstack (lua_State *L, int level, lua_Debug *ar) {
 static const char *upvalname (Proto *p, int uv) {
   TString *s = check_exp(uv < p->sizeupvalues, p->upvalues[uv].name);
   if (s == NULL) return "?";
-  else return getstr(s);
+  return getstr(s);
 }
 
 
@@ -136,10 +136,9 @@ static const char *findvararg (CallInfo *ci, int n, StkId *pos) {
   int nparams = clLvalue(ci->func)->p->numparams;
   if (n >= cast_int(ci->u.l.base - ci->func) - nparams)
     return NULL;  /* no such vararg */
-  else {
-    *pos = ci->func + nparams + n;
+      *pos = ci->func + nparams + n;
     return "(*vararg)";  /* generic name for any vararg */
-  }
+ 
 }
 
 
@@ -150,10 +149,9 @@ static const char *findlocal (lua_State *L, CallInfo *ci, int n,
   if (isLua(ci)) {
     if (n < 0)  /* access to vararg values? */
       return findvararg(ci, -n, pos);
-    else {
-      base = ci->u.l.base;
+          base = ci->u.l.base;
       name = luaF_getlocalname(ci_func(ci)->p, n, currentpc(ci));
-    }
+   
   }
   else
     base = ci->func + 1;
@@ -249,7 +247,7 @@ static void collectvalidlines (lua_State *L, Closure *f) {
 static const char *getfuncname (lua_State *L, CallInfo *ci, const char **name) {
   if (ci == NULL)  /* no 'ci'? */
     return NULL;  /* no info */
-  else if (ci->callstatus & CIST_FIN) {  /* is this a finalizer? */
+  if (ci->callstatus & CIST_FIN) {  /* is this a finalizer? */
     *name = "__gc";
     return "metamethod";  /* report it as such */
   }
@@ -376,7 +374,7 @@ static void kname (Proto *p, int pc, int c, const char **name) {
 static int filterpc (int pc, int jmptarget) {
   if (pc < jmptarget)  /* is code conditional (inside a jump)? */
     return -1;  /* cannot know who sets that register */
-  else return pc;  /* current position sets that register */
+  return pc;  /* current position sets that register */
 }
 
 

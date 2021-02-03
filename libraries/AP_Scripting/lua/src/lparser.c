@@ -99,7 +99,7 @@ static int testnext (LexState *ls, int c) {
     luaX_next(ls);
     return 1;
   }
-  else return 0;
+  return 0;
 }
 
 
@@ -1397,7 +1397,7 @@ static void test_then_block (LexState *ls, int *escapelist) {
       leaveblock(fs);
       return;  /* and that is it */
     }
-    else  /* must skip over 'then' part if condition is false */
+     /* must skip over 'then' part if condition is false */
       jf = luaK_jump(fs);
   }
   else {  /* regular case (not goto/break) */

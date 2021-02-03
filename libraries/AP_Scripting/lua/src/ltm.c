@@ -65,7 +65,7 @@ const TValue *luaT_gettm (Table *events, TMS event, TString *ename) {
     events->flags |= cast_byte(1u<<event);  /* cache this fact */
     return NULL;
   }
-  else return tm;
+  return tm;
 }
 
 
@@ -161,7 +161,6 @@ int luaT_callorderTM (lua_State *L, const TValue *p1, const TValue *p2,
                       TMS event) {
   if (!luaT_callbinTM(L, p1, p2, L->top, event))
     return -1;  /* no metamethod */
-  else
-    return !l_isfalse(L->top);
+      return !l_isfalse(L->top);
 }
 

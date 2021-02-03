@@ -138,7 +138,7 @@ static void removeentry (Node *n) {
 */
 static int iscleared (global_State *g, const TValue *o) {
   if (!iscollectable(o)) return 0;
-  else if (ttisstring(o)) {
+  if (ttisstring(o)) {
     markobject(g, tsvalue(o));  /* strings are 'values', so are never weak */
     return 0;
   }
@@ -904,7 +904,7 @@ void luaC_checkfinalizer (lua_State *L, GCObject *o, Table *mt) {
   if (tofinalize(o) ||                 /* obj. is already marked... */
       gfasttm(g, mt, TM_GC) == NULL)   /* or has no finalizer? */
     return;  /* nothing to be done */
-  else {  /* move 'o' to 'finobj' list */
+   /* move 'o' to 'finobj' list */
     GCObject **p;
     if (issweepphase(g)) {
       makewhite(g, o);  /* "sweep" object 'o' */
@@ -917,7 +917,7 @@ void luaC_checkfinalizer (lua_State *L, GCObject *o, Table *mt) {
     o->next = g->finobj;  /* link it in 'finobj' list */
     g->finobj = o;
     l_setbit(o->marked, FINALIZEDBIT);  /* mark it as such */
-  }
+ 
 }
 
 /* }====================================================== */
@@ -1087,10 +1087,10 @@ static lu_mem singlestep (lua_State *L) {
         int n = runafewfinalizers(L);
         return (n * GCFINALIZECOST);
       }
-      else {  /* emergency mode or no more finalizers */
+       /* emergency mode or no more finalizers */
         g->gcstate = GCSpause;  /* finish collection */
         return 0;
-      }
+     
     }
     default: lua_assert(0); return 0;
   }
@@ -1116,11 +1116,10 @@ static l_mem getdebt (global_State *g) {
   l_mem debt = g->GCdebt;
   int stepmul = g->gcstepmul;
   if (debt <= 0) return 0;  /* minimal debt */
-  else {
-    debt = (debt / STEPMULADJ) + 1;
+      debt = (debt / STEPMULADJ) + 1;
     debt = (debt < MAX_LMEM / stepmul) ? debt * stepmul : MAX_LMEM;
     return debt;
-  }
+ 
 }
 
 /*

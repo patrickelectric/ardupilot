@@ -92,10 +92,9 @@ static lua_State *getthread (lua_State *L, int *arg) {
     *arg = 1;
     return lua_tothread(L, 1);
   }
-  else {
-    *arg = 0;
+      *arg = 0;
     return L;  /* function will operate over current thread */
-  }
+ 
 }
 
 
@@ -201,7 +200,7 @@ static int db_getlocal (lua_State *L) {
     lua_pushstring(L, lua_getlocal(L, NULL, nvar));  /* push local name */
     return 1;  /* return only name (there is no value) */
   }
-  else {  /* stack-level argument */
+   /* stack-level argument */
     int level = (int)luaL_checkinteger(L, arg + 1);
     if (!lua_getstack(L1, level, &ar))  /* out of range? */
       return luaL_argerror(L, arg+1, "level out of range");
@@ -217,7 +216,7 @@ static int db_getlocal (lua_State *L) {
       lua_pushnil(L);  /* no name (nor value) */
       return 1;
     }
-  }
+ 
 }
 
 

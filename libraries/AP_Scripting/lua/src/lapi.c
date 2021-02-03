@@ -63,7 +63,7 @@ static TValue *index2addr (lua_State *L, int idx) {
     TValue *o = ci->func + idx;
     api_check(L, idx <= ci->top - (ci->func + 1), "unacceptable index");
     if (o >= L->top) return NONVALIDVALUE;
-    else return o;
+    return o;
   }
   else if (!ispseudo(idx)) {  /* negative index */
     api_check(L, idx != 0 && -idx <= L->top - (ci->func + 1), "invalid index");
@@ -76,10 +76,9 @@ static TValue *index2addr (lua_State *L, int idx) {
     api_check(L, idx <= MAXUPVAL + 1, "upvalue index too large");
     if (ttislcf(ci->func))  /* light C function? */
       return NONVALIDVALUE;  /* it has no upvalues */
-    else {
-      CClosure *func = clCvalue(ci->func);
+          CClosure *func = clCvalue(ci->func);
       return (idx <= func->nupvalues) ? &func->upvalue[idx-1] : NONVALIDVALUE;
-    }
+   
   }
 }
 
@@ -144,7 +143,7 @@ LUA_API lua_CFunction lua_atpanic (lua_State *L, lua_CFunction panicf) {
 LUA_API const lua_Number *lua_version (lua_State *L) {
   static const lua_Number version = LUA_VERSION_NUM;
   if (L == NULL) return &version;
-  else return G(L)->version;
+  return G(L)->version;
 }
 
 
@@ -404,7 +403,7 @@ LUA_API size_t lua_rawlen (lua_State *L, int idx) {
 LUA_API lua_CFunction lua_tocfunction (lua_State *L, int idx) {
   StkId o = index2addr(L, idx);
   if (ttislcf(o)) return fvalue(o);
-  else if (ttisCclosure(o))
+  if (ttisCclosure(o))
     return clCvalue(o)->f;
   else return NULL;  /* not a C function */
 }

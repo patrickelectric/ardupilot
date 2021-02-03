@@ -143,10 +143,9 @@ static int os_execute (lua_State *L) {
   int stat = system(cmd);
   if (cmd != NULL)
     return luaL_execresult(L, stat);
-  else {
-    lua_pushboolean(L, stat);  /* true if there is a shell */
+      lua_pushboolean(L, stat);  /* true if there is a shell */
     return 1;
-  }
+ 
 }
 
 
@@ -243,7 +242,7 @@ static int getfield (lua_State *L, const char *key, int d, int delta) {
   if (!isnum) {  /* field is not an integer? */
     if (t != LUA_TNIL)  /* some other value? */
       return luaL_error(L, "field '%s' is not an integer", key);
-    else if (d < 0)  /* absent field; no default? */
+    if (d < 0)  /* absent field; no default? */
       return luaL_error(L, "field '%s' missing in date table", key);
     res = d;
   }

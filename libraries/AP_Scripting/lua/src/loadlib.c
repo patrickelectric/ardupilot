@@ -380,13 +380,12 @@ static int lookforfunc (lua_State *L, const char *path, const char *sym) {
     lua_pushboolean(L, 1);  /* return 'true' */
     return 0;  /* no errors */
   }
-  else {
-    lua_CFunction f = lsys_sym(L, reg, sym);
+      lua_CFunction f = lsys_sym(L, reg, sym);
     if (f == NULL)
       return ERRFUNC;  /* unable to find function */
     lua_pushcfunction(L, f);  /* else create new function */
     return 0;  /* no errors */
-  }
+ 
 }
 
 
@@ -396,12 +395,12 @@ static int ll_loadlib (lua_State *L) {
   int stat = lookforfunc(L, path, init);
   if (stat == 0)  /* no errors? */
     return 1;  /* return the loaded function */
-  else {  /* error; error message is on stack top */
+   /* error; error message is on stack top */
     lua_pushnil(L);
     lua_insert(L, -2);
     lua_pushstring(L, (stat == ERRLIB) ?  LIB_FAIL : "init");
     return 3;  /* return nil, error message, and where */
-  }
+ 
 }
 
 
@@ -461,11 +460,11 @@ static int ll_searchpath (lua_State *L) {
                                 luaL_optstring(L, 3, "."),
                                 luaL_optstring(L, 4, LUA_DIRSEP));
   if (f != NULL) return 1;
-  else {  /* error message is on top of the stack */
+   /* error message is on top of the stack */
     lua_pushnil(L);
     lua_insert(L, -2);
     return 2;  /* return nil + error message */
-  }
+ 
 }
 
 
@@ -486,8 +485,7 @@ static int checkload (lua_State *L, int stat, const char *filename) {
     lua_pushstring(L, filename);  /* will be 2nd argument to module */
     return 2;  /* return open function and file name */
   }
-  else
-    return luaL_error(L, "error loading module '%s' from file '%s':\n\t%s",
+      return luaL_error(L, "error loading module '%s' from file '%s':\n\t%s",
                           lua_tostring(L, 1), filename, lua_tostring(L, -1));
 }
 
@@ -547,10 +545,10 @@ static int searcher_Croot (lua_State *L) {
   if ((stat = loadfunc(L, filename, name)) != 0) {
     if (stat != ERRFUNC)
       return checkload(L, 0, filename);  /* real error */
-    else {  /* open function not found */
+     /* open function not found */
       lua_pushfstring(L, "\n\tno module '%s' in file '%s'", name, filename);
       return 1;
-    }
+   
   }
   lua_pushstring(L, filename);  /* will be 2nd argument to module */
   return 2;
@@ -584,7 +582,7 @@ static void findloader (lua_State *L, const char *name) {
     lua_call(L, 1, 2);  /* call it */
     if (lua_isfunction(L, -2))  /* did it find a loader? */
       return;  /* module loader found */
-    else if (lua_isstring(L, -2)) {  /* searcher returned error message? */
+    if (lua_isstring(L, -2)) {  /* searcher returned error message? */
       lua_pop(L, 1);  /* remove extra return */
       luaL_addvalue(&msg);  /* concatenate error message */
     }

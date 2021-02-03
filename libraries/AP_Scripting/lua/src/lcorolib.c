@@ -47,10 +47,9 @@ static int auxresume (lua_State *L, lua_State *co, int narg) {
     lua_xmove(co, L, nres);  /* move yielded values */
     return nres;
   }
-  else {
-    lua_xmove(co, L, 1);  /* move error message */
+      lua_xmove(co, L, 1);  /* move error message */
     return -1;  /* error flag */
-  }
+ 
 }
 
 
@@ -63,11 +62,10 @@ static int luaB_coresume (lua_State *L) {
     lua_insert(L, -2);
     return 2;  /* return false + error message */
   }
-  else {
-    lua_pushboolean(L, 1);
+      lua_pushboolean(L, 1);
     lua_insert(L, -(r + 1));
     return r + 1;  /* return true + 'resume' returns */
-  }
+ 
 }
 
 

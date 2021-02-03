@@ -78,7 +78,7 @@ static int doargs(int argc, char* argv[])
  {
   if (*argv[i]!='-')			/* end of options; keep it */
    break;
-  else if (IS("--"))			/* end of options; skip it */
+  if (IS("--"))			/* end of options; skip it */
   {
    ++i;
    if (version) ++version;
@@ -127,11 +127,10 @@ static const char* reader(lua_State *L, void *ud, size_t *size)
   *size=sizeof(FUNCTION)-1;
   return FUNCTION;
  }
- else
- {
-  *size=0;
+ 
+   *size=0;
   return NULL;
- }
+
 }
 
 #define toproto(L,i) getproto(L->top+(i))
@@ -140,9 +139,8 @@ static const Proto* combine(lua_State* L, int n)
 {
  if (n==1)
   return toproto(L,-1);
- else
- {
-  Proto* f;
+ 
+   Proto* f;
   int i=n;
   if (lua_load(L,reader,&i,"=(" PROGNAME ")",NULL)!=LUA_OK) fatal(lua_tostring(L,-1));
   f=toproto(L,-1);
@@ -153,7 +151,7 @@ static const Proto* combine(lua_State* L, int n)
   }
   f->sizelineinfo=0;
   return f;
- }
+
 }
 
 static int writer(lua_State* L, const void* p, size_t size, void* u)

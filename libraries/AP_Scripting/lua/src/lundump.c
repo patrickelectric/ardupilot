@@ -98,7 +98,7 @@ static TString *LoadString (LoadState *S) {
     LoadVar(S, size);
   if (size == 0)
     return NULL;
-  else if (--size <= LUAI_MAXSHORTLEN) {  /* short string? */
+  if (--size <= LUAI_MAXSHORTLEN) {  /* short string? */
     char buff[LUAI_MAXSHORTLEN];
     LoadVector(S, buff, size);
     return luaS_newlstr(S->L, buff, size);

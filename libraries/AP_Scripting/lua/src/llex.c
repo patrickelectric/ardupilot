@@ -86,13 +86,12 @@ const char *luaX_token2str (LexState *ls, int token) {
     lua_assert(token == cast_uchar(token));
     return luaO_pushfstring(ls->L, "'%c'", token);
   }
-  else {
-    const char *s = luaX_tokens[token - FIRST_RESERVED];
+      const char *s = luaX_tokens[token - FIRST_RESERVED];
     if (token < TK_EOS)  /* fixed format (symbols and reserved words)? */
       return luaO_pushfstring(ls->L, "'%s'", s);
     else  /* names, strings, and numerals */
       return s;
-  }
+ 
 }
 
 
@@ -190,7 +189,7 @@ static int check_next1 (LexState *ls, int c) {
     next(ls);
     return 1;
   }
-  else return 0;
+  return 0;
 }
 
 
@@ -204,7 +203,7 @@ static int check_next2 (LexState *ls, const char *set) {
     save_and_next(ls);
     return 1;
   }
-  else return 0;
+  return 0;
 }
 
 
@@ -237,11 +236,10 @@ static int read_numeral (LexState *ls, SemInfo *seminfo) {
     seminfo->i = ivalue(&obj);
     return TK_INT;
   }
-  else {
-    lua_assert(ttisfloat(&obj));
+      lua_assert(ttisfloat(&obj));
     seminfo->r = fltvalue(&obj);
     return TK_FLT;
-  }
+ 
 }
 
 
@@ -465,41 +463,41 @@ static int llex (LexState *ls, SemInfo *seminfo) {
           read_long_string(ls, seminfo, sep);
           return TK_STRING;
         }
-        else if (sep != -1)  /* '[=...' missing second bracket */
+        if (sep != -1)  /* '[=...' missing second bracket */
           lexerror(ls, "invalid long string delimiter", TK_STRING);
         return '[';
       }
       case '=': {
         next(ls);
         if (check_next1(ls, '=')) return TK_EQ;
-        else return '=';
+        return '=';
       }
       case '<': {
         next(ls);
         if (check_next1(ls, '=')) return TK_LE;
-        else if (check_next1(ls, '<')) return TK_SHL;
+        if (check_next1(ls, '<')) return TK_SHL;
         else return '<';
       }
       case '>': {
         next(ls);
         if (check_next1(ls, '=')) return TK_GE;
-        else if (check_next1(ls, '>')) return TK_SHR;
+        if (check_next1(ls, '>')) return TK_SHR;
         else return '>';
       }
       case '/': {
         next(ls);
         if (check_next1(ls, '/')) return TK_IDIV;
-        else return '/';
+        return '/';
       }
       case '~': {
         next(ls);
         if (check_next1(ls, '=')) return TK_NE;
-        else return '~';
+        return '~';
       }
       case ':': {
         next(ls);
         if (check_next1(ls, ':')) return TK_DBCOLON;
-        else return ':';
+        return ':';
       }
       case '"': case '\'': {  /* short literal strings */
         read_string(ls, ls->current, seminfo);
@@ -510,7 +508,7 @@ static int llex (LexState *ls, SemInfo *seminfo) {
         if (check_next1(ls, '.')) {
           if (check_next1(ls, '.'))
             return TK_DOTS;   /* '...' */
-          else return TK_CONCAT;   /* '..' */
+          return TK_CONCAT;   /* '..' */
         }
         else if (!lisdigit(ls->current)) return '.';
         else return read_numeral(ls, seminfo);
@@ -533,9 +531,8 @@ static int llex (LexState *ls, SemInfo *seminfo) {
           seminfo->ts = ts;
           if (isreserved(ts))  /* reserved word? */
             return ts->extra - 1 + FIRST_RESERVED;
-          else {
-            return TK_NAME;
-          }
+                      return TK_NAME;
+         
         }
         else {  /* single-char tokens (+ - / ...) */
           int c = ls->current;

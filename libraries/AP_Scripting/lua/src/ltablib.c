@@ -287,7 +287,7 @@ static void set2 (lua_State *L, IdxT i, IdxT j) {
 static int sort_comp (lua_State *L, int a, int b) {
   if (lua_isnil(L, 2))  /* no function? */
     return lua_compare(L, a, b, LUA_OPLT);  /* a < b */
-  else {  /* function */
+   /* function */
     int res;
     lua_pushvalue(L, 2);    /* push function */
     lua_pushvalue(L, a-1);  /* -1 to compensate function */
@@ -296,7 +296,7 @@ static int sort_comp (lua_State *L, int a, int b) {
     res = lua_toboolean(L, -1);  /* get result */
     lua_pop(L, 1);          /* pop result */
     return res;
-  }
+ 
 }
 
 

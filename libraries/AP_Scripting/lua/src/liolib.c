@@ -405,11 +405,10 @@ static int nextc (RN *rn) {
     rn->buff[0] = '\0';  /* invalidate result */
     return 0;  /* fail */
   }
-  else {
-    rn->buff[rn->n++] = rn->c;  /* save current char */
+      rn->buff[rn->n++] = rn->c;  /* save current char */
     rn->c = l_getc(rn->f);  /* read next one */
     return 1;
-  }
+ 
 }
 
 
@@ -419,7 +418,7 @@ static int nextc (RN *rn) {
 static int test2 (RN *rn, const char *set) {
   if (rn->c == set[0] || rn->c == set[1])
     return nextc(rn);
-  else return 0;
+  return 0;
 }
 
 
@@ -466,10 +465,10 @@ static int read_number (lua_State *L, FILE *f) {
   rn.buff[rn.n] = '\0';  /* finish string */
   if (lua_stringtonumber(L, rn.buff))  /* is this a valid number? */
     return 1;  /* ok */
-  else {  /* invalid format */
+   /* invalid format */
    lua_pushnil(L);  /* "result" to be removed */
    return 0;  /* read fails */
-  }
+ 
 }
 
 
@@ -602,7 +601,7 @@ static int io_readline (lua_State *L) {
   lua_assert(n > 0);  /* should return at least a nil */
   if (lua_toboolean(L, -n))  /* read at least one value? */
     return n;  /* return them */
-  else {  /* first result is nil: EOF or error */
+   /* first result is nil: EOF or error */
     if (n > 1) {  /* is there error information? */
       /* 2nd result is error message */
       return luaL_error(L, "%s", lua_tostring(L, -n + 1));
@@ -613,7 +612,7 @@ static int io_readline (lua_State *L) {
       aux_close(L);  /* close it */
     }
     return 0;
-  }
+ 
 }
 
 /* }====================================================== */
@@ -639,7 +638,7 @@ static int g_write (lua_State *L, FILE *f, int arg) {
     }
   }
   if (status) return 1;  /* file handle already on stack top */
-  else return luaL_fileresult(L, status, NULL);
+  return luaL_fileresult(L, status, NULL);
 }
 
 
@@ -667,10 +666,9 @@ static int f_seek (lua_State *L) {
   op = l_fseek(f, offset, mode[op]);
   if (op)
     return luaL_fileresult(L, 0, NULL);  /* error */
-  else {
-    lua_pushinteger(L, (lua_Integer)l_ftell(f));
+      lua_pushinteger(L, (lua_Integer)l_ftell(f));
     return 1;
-  }
+ 
 }
 
 

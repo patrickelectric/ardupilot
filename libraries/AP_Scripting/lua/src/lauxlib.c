@@ -56,7 +56,7 @@ static int findfield (lua_State *L, int objidx, int level) {
         lua_pop(L, 1);  /* remove value (but keep name) */
         return 1;
       }
-      else if (findfield(L, objidx, level - 1)) {  /* try recursively */
+      if (findfield(L, objidx, level - 1)) {  /* try recursively */
         lua_remove(L, -2);  /* remove table (but keep name) */
         lua_pushliteral(L, ".");
         lua_insert(L, -2);  /* place '.' between the two names */
@@ -87,10 +87,9 @@ static int pushglobalfuncname (lua_State *L, lua_Debug *ar) {
     lua_pop(L, 2);  /* remove pushed values */
     return 1;
   }
-  else {
-    lua_settop(L, top);  /* remove function and global table */
+      lua_settop(L, top);  /* remove function and global table */
     return 0;
-  }
+ 
 }
 
 
@@ -240,15 +239,14 @@ LUALIB_API int luaL_fileresult (lua_State *L, int stat, const char *fname) {
     lua_pushboolean(L, 1);
     return 1;
   }
-  else {
-    lua_pushnil(L);
+      lua_pushnil(L);
     if (fname)
       lua_pushfstring(L, "%s: %s", fname, strerror(en));
     else
       lua_pushstring(L, strerror(en));
     lua_pushinteger(L, en);
     return 3;
-  }
+ 
 }
 
 
@@ -278,8 +276,7 @@ LUALIB_API int luaL_execresult (lua_State *L, int stat) {
   const char *what = "exit";  /* type of termination */
   if (stat == -1)  /* error? */
     return luaL_fileresult(L, 0, NULL);
-  else {
-    l_inspectstat(stat, what);  /* interpret result */
+      l_inspectstat(stat, what);  /* interpret result */
     if (*what == 'e' && stat == 0)  /* successful termination? */
       lua_pushboolean(L, 1);
     else
@@ -287,7 +284,7 @@ LUALIB_API int luaL_execresult (lua_State *L, int stat) {
     lua_pushstring(L, what);
     lua_pushinteger(L, stat);
     return 3;  /* return true/nil,what,code */
-  }
+ 
 }
 
 /* }====================================================== */
@@ -404,7 +401,7 @@ LUALIB_API const char *luaL_optlstring (lua_State *L, int arg,
       *len = (def ? strlen(def) : 0);
     return def;
   }
-  else return luaL_checklstring(L, arg, len);
+  return luaL_checklstring(L, arg, len);
 }
 
 
@@ -699,7 +696,7 @@ static int skipcomment (LoadF *lf, int *cp) {
     *cp = getc(lf->f);  /* skip end-of-line, if present */
     return 1;  /* there was a comment */
   }
-  else return 0;  /* no comment */
+  return 0;  /* no comment */
 }
 
 
@@ -775,8 +772,7 @@ LUALIB_API int luaL_loadstring (lua_State *L, const char *s) {
 LUALIB_API int luaL_getmetafield (lua_State *L, int obj, const char *event) {
   if (!lua_getmetatable(L, obj))  /* no metatable? */
     return LUA_TNIL;
-  else {
-    int tt;
+      int tt;
     lua_pushstring(L, event);
     tt = lua_rawget(L, -2);
     if (tt == LUA_TNIL)  /* is metafield nil? */
@@ -784,7 +780,7 @@ LUALIB_API int luaL_getmetafield (lua_State *L, int obj, const char *event) {
     else
       lua_remove(L, -2);  /* remove only metatable */
     return tt;  /* return metafield type */
-  }
+ 
 }
 
 
@@ -954,14 +950,13 @@ LUALIB_API void luaL_setfuncs (lua_State *L, const luaL_Reg *l, int nup) {
 LUALIB_API int luaL_getsubtable (lua_State *L, int idx, const char *fname) {
   if (lua_getfield(L, idx, fname) == LUA_TTABLE)
     return 1;  /* table already there */
-  else {
-    lua_pop(L, 1);  /* remove previous result */
+      lua_pop(L, 1);  /* remove previous result */
     idx = lua_absindex(L, idx);
     lua_newtable(L);
     lua_pushvalue(L, -1);  /* copy to be left at top */
     lua_setfield(L, idx, fname);  /* assign new table to field */
     return 0;  /* false, because did not find table there */
-  }
+ 
 }
 
 
