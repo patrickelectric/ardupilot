@@ -202,8 +202,7 @@ void lua_scripts::run_next_script(lua_State *L) {
         }
         lua_pop(L, 1);
         return;
-    } else {
-        int returned = lua_gettop(L) - stack_top;
+    }         int returned = lua_gettop(L) - stack_top;
         switch (returned) {
             case 0:
                 // no time to reschedule so bail out
@@ -243,7 +242,7 @@ void lua_scripts::run_next_script(lua_State *L) {
                     break;
                  }
          }
-     }
+    
 }
 
 void lua_scripts::remove_script(lua_State *L, script_info *script) {

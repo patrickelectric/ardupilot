@@ -80,17 +80,17 @@ uint32_t * check_uint32_t(lua_State *L, int arg) {
         return 1; \
     }
 
-UINT32_T_BOX_OP(add, +)
-UINT32_T_BOX_OP(sub, -)
-UINT32_T_BOX_OP(mul, *)
-UINT32_T_BOX_OP(div, /)
-UINT32_T_BOX_OP(mod, %)
-UINT32_T_BOX_OP(idiv, /)
-UINT32_T_BOX_OP(band, &)
-UINT32_T_BOX_OP(bor, |)
-UINT32_T_BOX_OP(bxor, ^)
-UINT32_T_BOX_OP(shl, <<)
-UINT32_T_BOX_OP(shr, >>)
+(add, +)
+(sub, -)
+(mul, *)
+(div, /)
+(mod, %)
+(idiv, /)
+(band, &)
+(bor, |)
+(bxor, ^)
+(shl, <<)
+(shr, >>)
 
 #define UINT32_T_BOX_OP_BOOL(name, sym) \
     static int uint32_t___##name(lua_State *L) { \
@@ -109,9 +109,9 @@ UINT32_T_BOX_OP(shr, >>)
         return 1; \
     }
 
-UINT32_T_BOX_OP_BOOL(eq, ==)
-UINT32_T_BOX_OP_BOOL(lt, <)
-UINT32_T_BOX_OP_BOOL(le, <=)
+(eq, ==)
+(lt, <)
+(le, <=)
 
 #define UINT32_T_BOX_OP_UNARY(name, sym) \
     static int uint32_t___##name(lua_State *L) { \
