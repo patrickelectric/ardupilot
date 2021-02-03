@@ -137,7 +137,7 @@ protected:
     virtual bool _enter() { return true; }
 
     // subclasses override this to perform any required cleanup when exiting the mode
-    virtual void _exit() { return; }
+    virtual void _exit() { }
 
     // decode pilot steering and throttle inputs and return in steer_out and throttle_out arguments
     // steering_out is in the range -4500 ~ +4500 with positive numbers meaning rotate clockwise
