@@ -587,8 +587,6 @@ void AP_Logger_Block::start_new_log(void)
     writebuf.write((uint8_t*)&hdr, sizeof(FileHeader));
 
     start_new_log_reset_variables();
-
-    return;
 }
 
 // This function finds the first and last pages of a log file

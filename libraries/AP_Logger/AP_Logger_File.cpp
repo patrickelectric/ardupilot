@@ -818,10 +818,7 @@ void AP_Logger_File::start_new_log(void)
 
     if (written < to_write) {
         _open_error_ms = AP_HAL::millis();
-        return;
     }
-
-    return;
 }
 
 

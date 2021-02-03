@@ -1290,7 +1290,6 @@ void AP_Logger::start_io_thread(void)
     }
 
     _io_thread_started = true;
-    return;
 }
 
 /* End of Write support */
