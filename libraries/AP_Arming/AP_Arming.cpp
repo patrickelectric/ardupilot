@@ -1086,7 +1086,7 @@ bool AP_Arming::aux_auth_checks(bool display_failure)
             check_failed(ARMING_CHECK_AUX_AUTH, display_failure, "Auxiliary authorisation refused");
         }
         return false;
-    } else if (waiting_for_responses) {
+    } if (waiting_for_responses) {
         check_failed(ARMING_CHECK_AUX_AUTH, display_failure, "Waiting for auxiliary authorisation");
         return false;
     }
