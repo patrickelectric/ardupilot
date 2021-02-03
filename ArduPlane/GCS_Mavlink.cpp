@@ -700,9 +700,8 @@ MAV_RESULT GCS_MAVLINK_Plane::_handle_command_preflight_calibration(const mavlin
     if (is_equal(packet.param4,1.0f)) {
         if (plane.trim_radio()) {
             return MAV_RESULT_ACCEPTED;
-        } else {
-            return MAV_RESULT_FAILED;
-        }
+        }             return MAV_RESULT_FAILED;
+       
     }
 
     return GCS_MAVLINK::_handle_command_preflight_calibration(packet);

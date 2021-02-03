@@ -564,9 +564,8 @@ bool Plane::verify_takeoff()
         // can end up doing too sharp a turn
         auto_state.next_wp_crosstrack = false;
         return true;
-    } else {
-        return false;
-    }
+    }         return false;
+   
 }
 
 /*
@@ -752,9 +751,8 @@ bool Plane::verify_RTL()
         reached_loiter_target()) {
 			gcs().send_text(MAV_SEVERITY_INFO,"Reached RTL location");
 			return true;
-    } else {
-        return false;
-	}
+    }         return false;
+
 }
 
 bool Plane::verify_continue_and_change_alt()
@@ -782,7 +780,7 @@ bool Plane::verify_continue_and_change_alt()
         return true;
     }
     //descending?
-    else if (condition_value == 2 &&
+    if (condition_value == 2 &&
              adjusted_altitude_cm() <= next_WP_loc.alt) {
         return true;
     }    

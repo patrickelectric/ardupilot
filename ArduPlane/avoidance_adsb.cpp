@@ -160,7 +160,7 @@ bool AP_Avoidance_Plane::handle_avoidance_vertical(const AP_Avoidance::Obstacle 
          plane.guided_WP_loc.alt = plane.current_loc.alt + 1000; // set alt demand to be 10m above us, climb rate will be TECS_CLMB_MAX
          return true;
 
-     } else if (plane.current_loc.alt > plane.g.RTL_altitude_cm) {
+     } if (plane.current_loc.alt > plane.g.RTL_altitude_cm) {
          // should descend while above RTL alt
          // TODO: consider using a lower altitude than RTL_altitude_cm since it's default (100m) is quite high
          plane.guided_WP_loc.alt = plane.current_loc.alt - 1000; // set alt demand to be 10m below us, sink rate will be TECS_SINK_MAX

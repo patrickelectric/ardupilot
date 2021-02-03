@@ -949,8 +949,7 @@ void QuadPlane::multicopter_attitude_rate_update(float yaw_rate_cds)
                                                                                 plane.nav_pitch_cd,
                                                                                 yaw_rate_cds);
                 return;
-            } else {
-                // In plane input mode, the roll and yaw sticks are swapped
+            }                 // In plane input mode, the roll and yaw sticks are swapped
                 // and their effective axes rotate from yaw to roll and vice versa
                 // as pitch goes from zero to 90.
                 // So it is necessary to also rotate their scaling.
@@ -978,7 +977,7 @@ void QuadPlane::multicopter_attitude_rate_update(float yaw_rate_cds)
                                                                                 plane.nav_pitch_cd,
                                                                                 p_yaw_rate);
                 return;
-            }
+           
         }
 
         if (use_multicopter_eulers) {
@@ -1177,9 +1176,8 @@ float QuadPlane::get_pilot_throttle()
 
         // this puts mid stick at hover throttle
         return throttle_curve(thr_mid, thrust_curve_expo, throttle_in);;
-    } else {
-        return throttle_in;
-    }
+    }         return throttle_in;
+   
 }
 
 /*
@@ -1345,7 +1343,7 @@ bool QuadPlane::should_relax(void)
         landing_detect.lower_limit_start_ms = 0;
         landing_detect.land_start_ms = 0;
         return false;
-    } else if (landing_detect.lower_limit_start_ms == 0) {
+    } if (landing_detect.lower_limit_start_ms == 0) {
         landing_detect.lower_limit_start_ms = tnow;
     }
 
@@ -3139,14 +3137,13 @@ int8_t QuadPlane::forward_throttle_pct()
 
         if (rc_fwd_thr_ch == nullptr) {
             return 0;
-        } else {
-            // calculate fwd throttle demand from manual input
+        }             // calculate fwd throttle demand from manual input
             float fwd_thr = rc_fwd_thr_ch->percent_input();
 
             // set forward throttle to fwd_thr_max * (manual input + mix): range [0,100]
             fwd_thr *= .01f * constrain_float(fwd_thr_max, 0, 100);
             return fwd_thr;
-        }
+       
     }
 
     /*
@@ -3428,9 +3425,8 @@ bool QuadPlane::is_vtol_land(uint16_t id) const
     if (id == MAV_CMD_NAV_VTOL_LAND) {
         if (options & QuadPlane::OPTION_MISSION_LAND_FW_APPROACH) {
             return plane.vtol_approach_s.approach_stage == Plane::Landing_ApproachStage::VTOL_LANDING;
-        } else {
-            return true;
-        }
+        }             return true;
+       
     }
     if (id == MAV_CMD_NAV_LAND && available() && (options & OPTION_ALLOW_FW_LAND) == 0) {
         // treat fixed wing land as VTOL land

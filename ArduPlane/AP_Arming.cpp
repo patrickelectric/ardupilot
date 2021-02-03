@@ -182,7 +182,7 @@ bool AP_Arming_Plane::arm_checks(AP_Arming::Method method)
         if (!plane.geofence_set_enabled(true)) {
             gcs().send_text(MAV_SEVERITY_WARNING, "Fence: cannot enable for arming");
             return false;
-        } else if (!plane.geofence_prearm_check()) {
+        } if (!plane.geofence_prearm_check()) {
             plane.geofence_set_enabled(false);
             return false;
         } else {

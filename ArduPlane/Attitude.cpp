@@ -63,9 +63,8 @@ bool Plane::stick_mixing_enabled(void)
             !rc_failsafe_active()) {
             // we're in an auto mode, and haven't triggered failsafe
             return true;
-        } else {
-            return false;
-        }
+        }             return false;
+       
     }
 
     if (failsafe.rc_failsafe && g.fs_action_short == FS_ACTION_SHORT_FBWA) {
