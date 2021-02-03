@@ -411,9 +411,8 @@ float AP_Baro::get_air_density_ratio(void)
     const float eas2tas = get_EAS2TAS();
     if (eas2tas > 0.0f) {
         return 1.0f/(sq(eas2tas));
-    } else {
-        return 1.0f;
-    }
+    }         return 1.0f;
+   
 }
 
 // return current climb_rate estimate relative to time that calibrate()
@@ -435,9 +434,8 @@ float AP_Baro::get_ground_temperature(void) const
 {
     if (is_zero(_user_ground_temperature)) {
         return _guessed_ground_temperature;
-    } else {
-        return _user_ground_temperature;
-    }
+    }         return _user_ground_temperature;
+   
 }
 
 
