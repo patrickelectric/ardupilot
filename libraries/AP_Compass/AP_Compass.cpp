@@ -923,7 +923,7 @@ bool Compass::register_compass(int32_t dev_id, uint8_t& instance)
             }
             instance = i+COMPASS_MAX_INSTANCES;
             return false;
-        } else if (extra_dev_id[i] == 0) {
+        } if (extra_dev_id[i] == 0) {
             extra_dev_id[_unreg_compass_count++].set(dev_id);
             instance = i+COMPASS_MAX_INSTANCES;
             return false;

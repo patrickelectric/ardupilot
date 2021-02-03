@@ -38,7 +38,7 @@ void Compass::cal_update()
     if (is_calibrating()) {
         _cal_has_run = true;
         return;
-    } else if (_cal_has_run && _auto_reboot()) {
+    } if (_cal_has_run && _auto_reboot()) {
         hal.scheduler->delay(1000);
         hal.scheduler->reboot(false);
     }
@@ -186,7 +186,7 @@ bool Compass::_accept_calibration(uint8_t i)
 
     if (_cal_saved[prio] || cal_report.status == CompassCalibrator::Status::NOT_STARTED) {
         return true;
-    } else if (cal_report.status == CompassCalibrator::Status::SUCCESS) {
+    } if (cal_report.status == CompassCalibrator::Status::SUCCESS) {
         _cal_saved[prio] = true;
 
         Vector3f ofs(cal_report.ofs), diag(cal_report.diag), offdiag(cal_report.offdiag);

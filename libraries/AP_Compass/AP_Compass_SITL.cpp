@@ -18,7 +18,7 @@ AP_Compass_SITL::AP_Compass_SITL()
             uint8_t instance;
             if (!register_compass(dev_id, instance)) {
                 continue;
-            } else if (_num_compass<MAX_SITL_COMPASSES) {
+            } if (_num_compass<MAX_SITL_COMPASSES) {
                 _compass_instance[_num_compass] = instance;
                 set_dev_id(_compass_instance[_num_compass], dev_id);
 
