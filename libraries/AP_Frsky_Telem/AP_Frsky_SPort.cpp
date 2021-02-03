@@ -156,16 +156,14 @@ uint32_t AP_Frsky_SPort::calc_gps_latlng(bool &send_latitude)
         send_latitude = false;
         if (loc.lat < 0) {
             return ((labs(loc.lat)/100)*6) | 0x40000000;
-        } else {
-            return ((labs(loc.lat)/100)*6);
-        }
+        }             return ((labs(loc.lat)/100)*6);
+       
     } else {
         send_latitude = true;
         if (loc.lng < 0) {
             return ((labs(loc.lng)/100)*6) | 0xC0000000;
-        } else {
-            return ((labs(loc.lng)/100)*6) | 0x80000000;
-        }
+        }             return ((labs(loc.lng)/100)*6) | 0x80000000;
+       
     }
 }
 
