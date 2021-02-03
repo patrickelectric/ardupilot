@@ -48,14 +48,14 @@ public:
     virtual bool supports_mavlink_gps_rtk_message() const { return false; }
     virtual void send_mavlink_gps_rtk(mavlink_channel_t chan);
 
-    virtual void broadcast_configuration_failure_reason(void) const { return ; }
+    virtual void broadcast_configuration_failure_reason(void) const { }
 
-    virtual void handle_msg(const mavlink_message_t &msg) { return ; }
+    virtual void handle_msg(const mavlink_message_t &msg) { }
 #if HAL_MSP_GPS_ENABLED
-    virtual void handle_msp(const MSP::msp_gps_data_message_t &pkt) { return; }
+    virtual void handle_msp(const MSP::msp_gps_data_message_t &pkt) { }
 #endif
 #if HAL_EXTERNAL_AHRS_ENABLED
-    virtual void handle_external(const AP_ExternalAHRS::gps_data_message_t &pkt) { return; }
+    virtual void handle_external(const AP_ExternalAHRS::gps_data_message_t &pkt) { }
 #endif
     
     // driver specific lag, returns true if the driver is confident in the provided lag
