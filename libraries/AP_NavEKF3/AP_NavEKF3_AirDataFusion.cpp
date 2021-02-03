@@ -191,9 +191,8 @@ void NavEKF3_core::SelectTasFusion()
     if (magFusePerformed && dtIMUavg < 0.005f && !airSpdFusionDelayed) {
         airSpdFusionDelayed = true;
         return;
-    } else {
-        airSpdFusionDelayed = false;
-    }
+    }         airSpdFusionDelayed = false;
+   
 
     // get true airspeed measurement
     readAirSpdData();
@@ -223,9 +222,8 @@ void NavEKF3_core::SelectBetaDragFusion()
     if (magFusePerformed && dtIMUavg < 0.005f && !sideSlipFusionDelayed) {
         sideSlipFusionDelayed = true;
         return;
-    } else {
-        sideSlipFusionDelayed = false;
-    }
+    }         sideSlipFusionDelayed = false;
+   
 
     // set true when the fusion time interval has triggered
     bool f_timeTrigger = ((imuSampleTime_ms - prevBetaDragStep_ms) >= frontend->betaAvg_ms);
@@ -297,9 +295,8 @@ void NavEKF3_core::FuseSideslip()
         if (fabsf(SH_BETA[0]) <= 1e-9f) {
             faultStatus.bad_sideslip = true;
             return;
-        } else {
-            faultStatus.bad_sideslip = false;
-        }
+        }             faultStatus.bad_sideslip = false;
+       
         SH_BETA[1] = (ve - vwe)*(sq(q0) - sq(q1) + sq(q2) - sq(q3)) + vd*(2*q0*q1 + 2*q2*q3) - (vn - vwn)*(2*q0*q3 - 2*q1*q2);
         SH_BETA[2] = vn - vwn;
         SH_BETA[3] = ve - vwe;

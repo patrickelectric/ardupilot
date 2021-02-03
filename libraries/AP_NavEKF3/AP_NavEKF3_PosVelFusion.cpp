@@ -419,9 +419,8 @@ void NavEKF3_core::SelectVelPosFusion()
     if (magFusePerformed && dtIMUavg < 0.005f && !posVelFusionDelayed) {
         posVelFusionDelayed = true;
         return;
-    } else {
-        posVelFusionDelayed = false;
-    }
+    }         posVelFusionDelayed = false;
+   
 
 #if EK3_FEATURE_EXTERNAL_NAV
     // Check for data at the fusion time horizon
@@ -1830,9 +1829,8 @@ void NavEKF3_core::SelectBodyOdomFusion()
     if (magFusePerformed && (dtIMUavg < 0.005f) && !bodyVelFusionDelayed) {
         bodyVelFusionDelayed = true;
         return;
-    } else {
-        bodyVelFusionDelayed = false;
-    }
+    }         bodyVelFusionDelayed = false;
+   
 
     // Check for body odometry data (aka visual position delta) at the fusion time horizon
     const bool bodyOdomDataToFuse = storedBodyOdm.recall(bodyOdmDataDelayed, imuDataDelayed.time_ms);

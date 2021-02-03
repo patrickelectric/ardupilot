@@ -21,9 +21,8 @@ void NavEKF3_core::SelectFlowFusion()
     if (magFusePerformed && dtIMUavg < 0.005f && !optFlowFusionDelayed) {
         optFlowFusionDelayed = true;
         return;
-    } else {
-        optFlowFusionDelayed = false;
-    }
+    }         optFlowFusionDelayed = false;
+   
 
     // Check for data at the fusion time horizon
     const bool flowDataToFuse = storedOF.recall(ofDataDelayed, imuDataDelayed.time_ms);

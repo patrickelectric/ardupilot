@@ -512,7 +512,7 @@ bool NavEKF3_core::InitialiseFilterBootstrap(void)
     if (firstInitTime_ms == 0) {
         firstInitTime_ms = imuSampleTime_ms;
         return false;
-    } else if (imuSampleTime_ms - firstInitTime_ms < 1000) {
+    } if (imuSampleTime_ms - firstInitTime_ms < 1000) {
         return false;
     }
 

@@ -1000,9 +1000,8 @@ void NavEKF3_core::writeExtNavData(const Vector3f &pos, const Quaternion &quat, 
     // don't try to write to buffer until the filter has been initialised
     if (((timeStamp_ms - extNavMeasTime_ms) < frontend->extNavIntervalMin_ms) || !statesInitialised) {
         return;
-    } else {
-        extNavMeasTime_ms = timeStamp_ms;
-    }
+    }         extNavMeasTime_ms = timeStamp_ms;
+   
 
     ext_nav_elements extNavDataNew {};
 
