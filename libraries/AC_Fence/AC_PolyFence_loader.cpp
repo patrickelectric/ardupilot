@@ -909,7 +909,7 @@ bool AC_PolyFence_loader::validate_fence(const AC_PolyFenceItem *new_items, uint
                 if (new_items[i].type != expecting_type) {
                     gcs().send_text(MAV_SEVERITY_WARNING, "Received incorrect vertex type (want=%u got=%u)", (unsigned)expecting_type, (unsigned)new_items[i].type);
                     return false;
-                } else if (new_items[i].vertex_count != orig_expected_type_count) {
+                } if (new_items[i].vertex_count != orig_expected_type_count) {
                     gcs().send_text(MAV_SEVERITY_WARNING, "Unexpected vertex count want=%u got=%u\n", orig_expected_type_count, new_items[i].vertex_count);
                     return false;
                 }
