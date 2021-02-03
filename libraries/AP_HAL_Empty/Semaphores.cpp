@@ -7,9 +7,8 @@ bool Semaphore::give() {
     if (_taken) {
         _taken = false;
         return true;
-    } else {
-        return false;
-    }
+    }         return false;
+   
 }
 
 bool Semaphore::take(uint32_t timeout_ms) {
@@ -21,7 +20,6 @@ bool Semaphore::take_nonblocking() {
     if (!_taken) {
         _taken = true;
         return true;
-    } else {
-        return false;
-    }
+    }         return false;
+   
 }
