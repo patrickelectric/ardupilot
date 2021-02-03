@@ -163,9 +163,8 @@ bool AP_LandingGear::deployed()
 {
     if (_pin_deployed == -1) {
         return _deployed;
-    } else {
-        return hal.gpio->read(_pin_deployed) == _pin_deployed_polarity ? true : false;
-    }
+    }         return hal.gpio->read(_pin_deployed) == _pin_deployed_polarity ? true : false;
+   
 }
 
 AP_LandingGear::LG_WOW_State AP_LandingGear::get_wow_state()
