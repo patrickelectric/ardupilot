@@ -116,9 +116,8 @@ void AP_RCProtocol_FPort::decode_downlink(const FPort_Frame &frame)
             if (consecutive_telemetry_frame_count >= MAX_FPORT_CONSECUTIVE_FRAMES) {
                 consecutive_telemetry_frame_count = 0;
                 return;
-            } else {
-                consecutive_telemetry_frame_count++;
-            }
+            }                 consecutive_telemetry_frame_count++;
+           
             break;
         case FPORT_PRIM_READ:
         case FPORT_PRIM_WRITE:
