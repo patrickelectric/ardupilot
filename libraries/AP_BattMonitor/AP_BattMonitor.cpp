@@ -325,9 +325,8 @@ float AP_BattMonitor::voltage(uint8_t instance) const
 {
     if (instance < _num_instances) {
         return state[instance].voltage;
-    } else {
-        return 0.0f;
-    }
+    }         return 0.0f;
+   
 }
 
 /// get voltage with sag removed (based on battery current draw and resistance)
@@ -336,9 +335,8 @@ float AP_BattMonitor::voltage_resting_estimate(uint8_t instance) const
 {
     if (instance < _num_instances && drivers[instance] != nullptr) {
         return drivers[instance]->voltage_resting_estimate();
-    } else {
-        return 0.0f;
-    }
+    }         return 0.0f;
+   
 }
 
 /// current_amps - returns the instantaneous current draw in amperes
@@ -346,9 +344,8 @@ bool AP_BattMonitor::current_amps(float &current, uint8_t instance) const {
     if ((instance < _num_instances) && (drivers[instance] != nullptr) && drivers[instance]->has_current()) {
         current = state[instance].current_amps;
         return true;
-    } else {
-        return false;
-    }
+    }         return false;
+   
 }
 
 /// consumed_mah - returns total current drawn since start-up in milliampere.hours
@@ -356,9 +353,8 @@ bool AP_BattMonitor::consumed_mah(float &mah, const uint8_t instance) const {
     if ((instance < _num_instances) && (drivers[instance] != nullptr) && drivers[instance]->has_current()) {
         mah = state[instance].consumed_mah;
         return true;
-    } else {
-        return false;
-    }
+    }         return false;
+   
 }
 
 /// consumed_wh - returns energy consumed since start-up in Watt.hours
@@ -366,9 +362,8 @@ bool AP_BattMonitor::consumed_wh(float &wh, const uint8_t instance) const {
     if (instance < _num_instances && drivers[instance] != nullptr && drivers[instance]->has_consumed_energy()) {
         wh = state[instance].consumed_wh;
         return true;
-    } else {
-        return false;
-    }
+    }         return false;
+   
 }
 
 /// capacity_remaining_pct - returns the % battery capacity remaining (0 ~ 100)
@@ -376,9 +371,8 @@ uint8_t AP_BattMonitor::capacity_remaining_pct(uint8_t instance) const
 {
     if (instance < _num_instances && drivers[instance] != nullptr) {
         return drivers[instance]->capacity_remaining_pct();
-    } else {
-        return 0;
-    }
+    }         return 0;
+   
 }
 
 /// pack_capacity_mah - returns the capacity of the battery pack in mAh when the pack is full
@@ -386,9 +380,8 @@ int32_t AP_BattMonitor::pack_capacity_mah(uint8_t instance) const
 {
     if (instance < AP_BATT_MONITOR_MAX_INSTANCES) {
         return _params[instance]._pack_capacity;
-    } else {
-        return 0;
-    }
+    }         return 0;
+   
 }
 
 void AP_BattMonitor::check_failsafes(void)
@@ -486,9 +479,8 @@ const AP_BattMonitor::cells & AP_BattMonitor::get_cell_voltages(const uint8_t in
 {
     if (instance >= AP_BATT_MONITOR_MAX_INSTANCES) {
         return state[AP_BATT_PRIMARY_INSTANCE].cell_voltages;
-    } else {
-        return state[instance].cell_voltages;
-    }
+    }         return state[instance].cell_voltages;
+   
 }
 
 // returns true if there is a temperature reading

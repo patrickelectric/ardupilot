@@ -53,7 +53,7 @@ bool AP_BattMonitor_SMBus::read_full_charge_capacity(void)
 
     if (_full_charge_capacity != 0) {
         return true;
-    } else if (read_word(BATTMONITOR_SMBUS_FULL_CHARGE_CAPACITY, data)) {
+    } if (read_word(BATTMONITOR_SMBUS_FULL_CHARGE_CAPACITY, data)) {
         _full_charge_capacity = data * get_capacity_scaler();
         return true;
     }
@@ -105,7 +105,7 @@ bool AP_BattMonitor_SMBus::read_serial_number(void)
     // don't recheck the serial number if we already have it
     if (_serial_number != -1) {
         return true;
-    } else if (read_word(BATTMONITOR_SMBUS_SERIAL, data)) {
+    } if (read_word(BATTMONITOR_SMBUS_SERIAL, data)) {
         _serial_number = data;
         return true;
     }
