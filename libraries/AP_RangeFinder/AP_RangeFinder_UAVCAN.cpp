@@ -61,11 +61,10 @@ AP_RangeFinder_UAVCAN* AP_RangeFinder_UAVCAN::get_uavcan_backend(AP_UAVCAN* ap_u
             if (driver->_ap_uavcan == ap_uavcan && 
                 driver->_node_id == node_id) {
                 return driver;
-            } else {
-                //we found a possible duplicate addressed sensor
+            }                 //we found a possible duplicate addressed sensor
                 //we return nothing in such scenario
                 return nullptr;
-            }
+           
         }
     }
     

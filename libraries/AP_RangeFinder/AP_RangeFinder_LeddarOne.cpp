@@ -78,7 +78,7 @@ bool AP_RangeFinder_LeddarOne::get_reading(uint16_t &reading_cm)
             return true;
         }
         // if status is not reading buffer, reset mod_bus status to read new buffer
-        else if (leddarone_status != LEDDARONE_STATE_READING_BUFFER || AP_HAL::millis() - last_available_ms > 200) {
+        if (leddarone_status != LEDDARONE_STATE_READING_BUFFER || AP_HAL::millis() - last_available_ms > 200) {
             // if read_len is zero, send request without initialize
             modbus_status = (read_len == 0) ? LEDDARONE_MODBUS_STATE_PRE_SEND_REQUEST : LEDDARONE_MODBUS_STATE_INIT;
         }
@@ -101,11 +101,10 @@ bool AP_RangeFinder_LeddarOne::CRC16(uint8_t *aBuffer, uint8_t aLength, bool aCh
 
     if (aCheck) {
         return (aBuffer[aLength] == lCRCLo) && (aBuffer[aLength+1] == lCRCHi);
-    } else {
-        aBuffer[aLength] = lCRCLo;
+    }         aBuffer[aLength] = lCRCLo;
         aBuffer[aLength+1] = lCRCHi;
         return true;
-    }
+   
 }
 
  /*

@@ -378,9 +378,8 @@ uint16_t AP_RangeFinder_VL53L1X::encodeTimeout(uint32_t timeout_mclks)
         }
         return (ms_byte << 8) | (ls_byte & 0xFF);
     }
-    else {
-        return 0;
-    }
+            return 0;
+   
 }
 
 // Convert sequence step timeout from macro periods to microseconds with given

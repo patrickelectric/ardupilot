@@ -30,7 +30,7 @@ bool AP_RangeFinder_uLanding::detect_version(void)
     if (_version_known) {
         // return true if we've already detected the uLanding version
         return true;
-    } else if (uart == nullptr) {
+    } if (uart == nullptr) {
         return false;
     }
 
@@ -55,8 +55,7 @@ bool AP_RangeFinder_uLanding::detect_version(void)
                      * header byte in the old 3-byte data format
                      */
                     continue;
-                } else {
-                    if (c == byte1) {
+                }                     if (c == byte1) {
                         // if header byte is recurring, set uLanding Version
                         _version = 0;
                         _header = ULANDING_HDR_V0;
@@ -70,7 +69,7 @@ bool AP_RangeFinder_uLanding::detect_version(void)
                         byte1 = 0;
                         hdr_found = false;
                     }
-                }
+               
             } else {
                 if ((c & 0x80) || (c == ULANDING_HDR_V0)) {
                     /* Though unlikely, it is possible we could find ULANDING_HDR
@@ -141,8 +140,7 @@ bool AP_RangeFinder_uLanding::get_reading(uint16_t &reading_cm)
                  * (or 3 bytes for Version 0 firmware)
                  */
                 continue;
-            } else {
-                if (_version == 0 && _header != ULANDING_HDR) {
+            }                 if (_version == 0 && _header != ULANDING_HDR) {
                     // parse data for Firmware Version #0
                     sum += (_linebuf[2]&0x7F)*128 + (_linebuf[1]&0x7F);
                     count++;
@@ -157,7 +155,7 @@ bool AP_RangeFinder_uLanding::get_reading(uint16_t &reading_cm)
 
                 hdr_found = false;
                 _linebuf_len = 0;
-            }
+           
         }
     }
 
