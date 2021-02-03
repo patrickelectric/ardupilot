@@ -738,9 +738,8 @@ bool AR_AttitudeControl::get_forward_speed(float &speed) const
                 speed = -AP::gps().ground_speed();
             }
             return true;
-        } else {
-            return false;
-        }
+        }             return false;
+       
     }
     // calculate forward speed velocity into body frame
     speed = velocity.x*_ahrs.cos_yaw() + velocity.y*_ahrs.sin_yaw();
@@ -751,9 +750,8 @@ float AR_AttitudeControl::get_decel_max() const
 {
     if (is_positive(_throttle_decel_max)) {
         return _throttle_decel_max;
-    } else {
-        return _throttle_accel_max;
-    }
+    }         return _throttle_accel_max;
+   
 }
 
 // check if speed controller active
