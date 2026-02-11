@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/mman.h>
+#include <sys/reboot.h>
 #include <sys/time.h>
 #include <unistd.h>
 
@@ -322,7 +323,26 @@ void Scheduler::set_system_initialized()
 
 void Scheduler::reboot(bool hold_in_bootloader)
 {
+    ::printf("Rebooting system...\n");
+    // flush pending storage writes and filesystem buffers
+    hal.storage->_timer_tick();
+    ::sync();
+    ::reboot(RB_AUTOBOOT);
+    // fall back to exit if reboot syscall failed (e.g. not running as root)
+    ::fprintf(stderr, "reboot() failed: %s\n", strerror(errno));
     exit(1);
+}
+
+void Scheduler::shutdown()
+{
+    ::printf("Shutting down system...\n");
+    // flush pending storage writes and filesystem buffers
+    hal.storage->_timer_tick();
+    ::sync();
+    ::reboot(RB_POWER_OFF);
+    // fall back to exit if shutdown syscall failed (e.g. not running as root)
+    ::fprintf(stderr, "shutdown failed: %s\n", strerror(errno));
+    exit(0);
 }
 
 #if APM_BUILD_TYPE(APM_BUILD_Replay) || APM_BUILD_TYPE(APM_BUILD_UNKNOWN)

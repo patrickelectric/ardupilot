@@ -40,6 +40,7 @@ public:
     bool     is_system_initialized() override { return _initialized; };
 
     void     reboot(bool hold_in_bootloader) override;
+    void     shutdown();
 
     void     stop_clock(uint64_t time_usec) override;
 

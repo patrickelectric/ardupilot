@@ -89,6 +89,10 @@
 #include <SITL/SITL.h>
 #endif
 
+#if CONFIG_HAL_BOARD == HAL_BOARD_LINUX
+#include <AP_HAL_Linux/Scheduler.h>
+#endif
+
 #if HAL_MAX_CAN_PROTOCOL_DRIVERS
   #include <AP_CANManager/AP_CANManager.h>
   #include <AP_Common/AP_Common.h>
@@ -3640,10 +3644,19 @@ MAV_RESULT GCS_MAVLINK::handle_preflight_reboot(const mavlink_command_int_t &pac
         }
     }
 
-    if (!(is_equal(packet.param1, 1.0f) || is_equal(packet.param1, 3.0f))) {
-        // param1 must be 1 or 3 - 1 being reboot, 3 being reboot-to-bootloader
+    const bool is_reboot = is_equal(packet.param1, 1.0f) || is_equal(packet.param1, 3.0f);
+    const bool is_shutdown = is_equal(packet.param1, 2.0f);
+
+    if (!is_reboot && !is_shutdown) {
         return MAV_RESULT_UNSUPPORTED;
     }
+
+#if CONFIG_HAL_BOARD != HAL_BOARD_LINUX
+    if (is_shutdown) {
+        // shutdown only supported on Linux
+        return MAV_RESULT_UNSUPPORTED;
+    }
+#endif
 
 #if CONFIG_HAL_BOARD == HAL_BOARD_SITL
     {  // autotest relies in receiving the ACK for the reboot.  Ensure
@@ -3658,11 +3671,27 @@ MAV_RESULT GCS_MAVLINK::handle_preflight_reboot(const mavlink_command_int_t &pac
     }
 #endif
 
-    // send ack before we reboot
+    // send ack before we reboot/shutdown
     mavlink_msg_command_ack_send(chan, packet.command, MAV_RESULT_ACCEPTED,
                                  0, 0,
                                  msg.sysid,
                                  msg.compid);
+
+#if CONFIG_HAL_BOARD == HAL_BOARD_LINUX
+    if (is_shutdown) {
+        // flush pending parameter writes
+        AP_Param::flush();
+
+        // do not process incoming mavlink messages while we delay:
+        hal.scheduler->register_delay_callback(nullptr, 5);
+
+        // delay to give the ACK a chance to get out
+        hal.scheduler->delay(200);
+
+        Linux::Scheduler::from(hal.scheduler)->shutdown();  // not expected to return
+        return MAV_RESULT_FAILED;
+    }
+#endif
 
     // when packet.param1 == 3 we reboot to hold in bootloader
     const bool hold_in_bootloader = is_equal(packet.param1, 3.0f);
